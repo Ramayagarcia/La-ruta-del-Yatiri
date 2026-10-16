@@ -12,8 +12,8 @@
 <div id="girar">📱 Gira tu celular en horizontal</div> <!-- Aviso para móviles en vertical -->
 <div id="hud" class="oculto"> <!-- Barra superior del juego -->
 <b id="nombreJ"></b> <!-- Nombre del personaje -->
-<span>❤️<div class="barra"><i id="bVida"></i></div></span> <!-- Barra de vida -->
-<span>🍖<div class="barra"><i id="bCom"></i></div></span> <!-- Barra de comida -->
+<span title="Vida">❤️<div class="barra"><i id="bVida"></i></div> <b id="nVida"></b></span> <!-- Barra y número de vida -->
+<span title="Comida">🍖<div class="barra"><i id="bCom"></i></div> <b id="nCom"></b></span> <!-- Barra y número de comida -->
 <span id="mon"></span> <!-- Oro, legumbres y hojas de coca -->
 <button id="bTienda">🛒 Tienda</button> <!-- Abre la tienda -->
 <button id="bPausa">⏸️</button> <!-- Abre la pausa -->
@@ -58,7 +58,32 @@
 <h2>⏸️ Pausa</h2> <!-- Título -->
 <button id="pCont">▶️ Continuar</button> <!-- Reanuda -->
 <button id="pGuardar">💾 Guardar partida</button> <!-- Guarda -->
+<button id="pConsejos">💡 Consejos</button> <!-- Abre los consejos de monedas -->
 <button id="pSalir">🚪 Salir</button> <!-- Vuelve al inicio -->
+</section>
+<div id="alerta" class="oculto"></div> <!-- Advertencia de vida o comida baja -->
+<section id="ayuda" class="modal oculto"> <!-- Instrucciones de la primera vez -->
+<h2>🌿 Cómo jugar</h2> <!-- Título -->
+<div class="txt"> <!-- Texto de ayuda -->
+1️⃣ Toca un país del mapa para viajar. El primero es libre; después solo los vecinos (en verde claro).<br> <!-- Paso 1 -->
+2️⃣ Responde 5 preguntas: silueta, bandera, capital, verdadero/falso y presidente. Si fallas, no avanzas.<br> <!-- Paso 2 -->
+3️⃣ Ganas monedas y el país se pinta con el color de su bandera.<br> <!-- Paso 3 -->
+4️⃣ Cada país gasta vida y comida. Sin comida pierdes vida; sin vida, ¡game over!<br> <!-- Paso 4 -->
+5️⃣ En la 🛒 Tienda compras armas (pistas y saltos de preguntas), comida y botiquines.<br> <!-- Paso 5 -->
+6️⃣ Guarda tu partida desde ⏸️ Pausa. Allí también hay consejos. <!-- Paso 6 -->
+</div>
+<button id="aOk">¡Entendido!</button> <!-- Cierra las instrucciones -->
+</section>
+<section id="consejos" class="modal oculto"> <!-- Consejos para conseguir monedas -->
+<h2>💡 Consejos</h2> <!-- Título -->
+<div class="txt"> <!-- Texto de consejos -->
+🪙 <b>Oro:</b> explora un país al primer intento (+10 oro y +50 legumbres).<br> <!-- Cómo ganar oro -->
+🫘 <b>Legumbres:</b> +50 al explorar al primer intento y +30 si necesitaste más intentos.<br> <!-- Cómo ganar legumbres -->
+🌿 <b>Hoja de coca:</b> 1 por cada 5 países explorados al primer intento. Es la más valiosa.<br> <!-- Cómo ganar coca -->
+🔫 Con el AK-47 cada país da +80 legumbres y +2 oro.<br> <!-- Bonus del nivel 5 -->
+🍖 Si te quedas sin comida pierdes vida: compra canastas a tiempo.<br> <!-- Consejo de comida -->
+</div>
+<button id="cOk">Volver</button> <!-- Regresa a la pausa -->
 </section>
 <script src="script.js"></script> <!-- Conecta el JavaScript -->
 </body> <!-- Fin del cuerpo -->

@@ -88,12 +88,12 @@ function opciones() { // Países que se pueden explorar ahora
  const v = libres.filter(id => V[S.ult] && V[S.ult].has(id)); // Vecinos del último explorado
  return v.length ? v : libres; // Sin vecinos libres, cualquiera (evita quedarse atascado)
 }
-function resize() { cv.width = innerWidth; cv.height = innerHeight; pintar(); } // Ajusta el lienzo a la pantalla
+function resize() { const h = $('hud').offsetHeight ? $('hud').offsetHeight + 10 : 0; cv.style.top = h + 'px'; cv.style.height = (innerHeight - h) + 'px'; cv.width = innerWidth; cv.height = innerHeight - h; pintar(); } // Ajusta el lienzo a la pantalla
 addEventListener('resize', resize); resize(); // Reajusta al cambiar tamaño y al iniciar
 function dentro(pt, r) { let d = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) if ((r[i][1] > pt[1]) != (r[j][1] > pt[1]) && pt[0] < (r[j][0] - r[i][0]) * (pt[1] - r[i][1]) / (r[j][1] - r[i][1]) + r[i][0]) d = !d; return d; } // ¿Punto dentro del polígono?
 cv.addEventListener('pointerdown', e => { // Al tocar o hacer clic en el mapa
  if (!jugando || document.querySelector('.modal:not(.oculto)')) return; // Ignora si no juega o hay ventana
- const pt = inv(e.clientX * cv.width / innerWidth, e.clientY * cv.height / innerHeight); // Convierte clic a coordenadas
+ const pt = inv(e.clientX * cv.width / innerWidth, (e.clientY - cv.getBoundingClientRect().top) * cv.height / cv.clientHeight); // Convierte clic a coordenadas
  const g = geo.find(g => g.polys.some(po => dentro(pt, po[0]))); // Busca el país tocado
  if (!g) return; // Si es océano no hace nada
  const p = P.find(x => x[0] == g.id); // Busca datos del país
@@ -109,13 +109,16 @@ function hud() { // Actualiza barras y monedas
  const uri = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(s2)); // La convierte en imagen
  if (imgPJ.dataset.u != uri) { imgPJ.dataset.u = uri; imgPJ.src = uri; cv.style.cursor = `url("${uri}") 15 40, auto`; } // Cursor y marcador = personaje
  $('nombreJ').textContent = S.nombre; // Muestra el nombre
+ $('nVida').textContent = Math.max(0, S.vida); $('nCom').textContent = Math.max(0, S.com); // Vida y comida en números
+ $('alerta').classList.toggle('oculto', !(S.vida <= 25 || S.com <= 25)); // Muestra la advertencia si hay peligro
+ $('alerta').textContent = S.com <= 0 && !S.yatiri ? '⚠️ ¡Sin comida! Tu vida está bajando' : S.vida <= 25 ? '⚠️ ¡Vida baja! Compra un botiquín' : '⚠️ ¡Comida baja! Compra una canasta'; // Texto según el peligro
  $('bVida').style.width = S.vida + '%'; $('bCom').style.width = S.com + '%'; // Ancho de barras
- $('mon').innerHTML = ic(IC.oro, 22) + S.oro + ' ' + ic(IC.leg, 22) + S.leg + ' ' + ic(IC.coca, 22) + S.coca; // Monedas con logo
+ $('mon').innerHTML = [['oro', 'Oro', S.oro], ['leg', 'Legumbres', S.leg], ['coca', 'Hoja de coca', S.coca]].map(m => `<span class="mn" title="${m[1]}">${ic(IC[m[0]], 22)} ${m[2]}</span>`).join(' '); // Monedas con logo; el nombre sale al pasar el cursor
  $('tun').setAttribute('fill', ['#8b5a2b','#a0522d','#6a1b9a','#d4af37'][S.comida]); // Túnica evoluciona
  $('arma').innerHTML = S.arma ? IC.arma[S.arma - 1] : ''; // El arma comprada aparece en el personaje
- $('pj').classList.toggle('aura', !!S.yatiri); // Brillo del Yatiri
+ $('pj').classList.toggle('aura', !!S.yatiri); const hh = $('hud').offsetHeight ? $('hud').offsetHeight + 10 : 0; if (cv.style.top != hh + 'px') resize(); // Brillo del Yatiri
 }
-function entrar() { ['inicio'].forEach(i => $(i).classList.add('oculto')); ['hud', 'pj'].forEach(i => $(i).classList.remove('oculto')); jugando = true; hud(); pintar(); if (!S.ult) aviso('🌍 Elige tu primer país en el mapa'); } // Pasa del inicio al juego
+function entrar() { ['inicio'].forEach(i => $(i).classList.add('oculto')); ['hud', 'pj'].forEach(i => $(i).classList.remove('oculto')); jugando = true; hud(); resize(); if (!S.ult) aviso('🌍 Elige tu primer país en el mapa'); if (!localStorage.getItem('yatiriAyuda')) abrir('ayuda'); } // Pasa del inicio al juego
 $('bNueva').onclick = () => { // Nueva partida
  const n = $('nom').value.trim(); if (!n) return aviso('✍️ Escribe un nombre'); // Exige nombre
  S = { nombre: n, oro: 0, leg: 0, coca: 0, vida: 100, com: 100, arma: 0, comida: 0, botiq: 0, ok: {}, primeros: 0, yatiri: 0, pos: null, ult: null }; // Estado inicial
@@ -126,7 +129,7 @@ function guardar() { localStorage.setItem('yatiri', JSON.stringify(S)); nota('�
 const abrir = i => $(i).classList.remove('oculto'), cerrar = i => $(i).classList.add('oculto'); // Abrir y cerrar ventanas
 $('bPausa').onclick = () => abrir('pausa'); $('pCont').onclick = () => cerrar('pausa'); // Pausa y continuar
 $('pGuardar').onclick = guardar; // Botón guardar
-$('pSalir').onclick = () => { guardar(); cerrar('pausa'); jugando = false; ['hud', 'pj'].forEach(cerrar); abrir('inicio'); S = null; pintar(); }; // Salir al inicio
+$('pSalir').onclick = () => { guardar(); cerrar('pausa'); jugando = false; ['hud', 'pj', 'alerta'].forEach(cerrar); abrir('inicio'); S = null; resize(); }; // Salir al inicio
 setInterval(() => { // Cada segundo
  if (!jugando || document.querySelector('.modal:not(.oculto)')) return; // No corre en pausa ni ventanas
  if (S.com <= 0 && !S.yatiri) S.vida -= 2; // Sin comida baja la vida de 2 en 2
@@ -178,7 +181,7 @@ function terminar() { // País completado
  S.ok[p[0]] = 1; S.ult = p[0]; if (String(p[4]).startsWith('hsl')) colorBandera(p); // Marca como explorado y recuerda el último
  let t = ''; // Texto de recompensa
  if (S.arma == 5) { S.leg += 80; S.oro += 2; t = mm('leg', 80) + mm('oro', 2); } // Recompensa del AK-47
- else if (primero) { S.oro += 10; S.primeros++; t = mm('oro', 10); if (S.primeros % 5 == 0) { S.coca++; t += mm('coca', 1); } } // Primer intento
+ else if (primero) { S.oro += 10; S.leg += 50; S.primeros++; t = mm('oro', 10) + mm('leg', 50); if (S.primeros % 5 == 0) { S.coca++; t += mm('coca', 1); } } // Primer intento
  else { S.leg += 30; t = mm('leg', 30); } // Otro intento
  const d = primero ? 5 : 10; S.vida = Math.max(0, S.vida - d); S.com = Math.max(0, S.com - d); // Desgaste
  cerrar('quiz'); aviso(`🎉 ${p[1]} explorado ${t}`); hud(); pintar(); guardar(); // Cierra, avisa y guarda
@@ -191,7 +194,7 @@ function tienda() { // Dibuja las mejoras disponibles
   const l = S[k], u = UP[k]; // Nivel actual y datos
   const d = document.createElement('div'); d.className = 'item'; // Fila
   d.innerHTML = ic(IC[k][Math.min(l, u.n.length - 1)], 36) + (l >= u.n.length ? `<b>${u.n[l - 1]} ✅ MÁXIMO</b>` : `<b>${u.n[l]}</b>`); // Logo y nombre
-  if (l < u.n.length) Object.keys(u.c[l]).forEach(m => { const b = document.createElement('button'); b.innerHTML = ic(IC[MON[m]], 18) + ' ' + u.c[l][m]; b.onclick = () => comprar(k, m); d.appendChild(b); }); // Botón por moneda
+  if (l < u.n.length) Object.keys(u.c[l]).forEach(m => { const b = document.createElement('button'); b.innerHTML = ic(IC[MON[m]], 18) + ' ' + u.c[l][m]; b.title = { g: 'Oro', l: 'Legumbres', c: 'Hoja de coca' }[m]; b.onclick = () => comprar(k, m); d.appendChild(b); }); // Botón por moneda
   $('items').appendChild(d); // Agrega fila
  });
 }
@@ -224,3 +227,8 @@ function colorBandera(p) { // Calcula el color dominante de la bandera
  };
  im.src = 'https://flagcdn.com/w80/' + p[2] + '.png'; // Carga la bandera
 }
+
+$('aOk').onclick = () => { localStorage.setItem('yatiriAyuda', 1); cerrar('ayuda'); }; // Cierra las instrucciones y no vuelven a salir
+$('pConsejos').onclick = () => { cerrar('pausa'); abrir('consejos'); }; // Abre los consejos desde la pausa
+$('cOk').onclick = () => { cerrar('consejos'); abrir('pausa'); }; // Vuelve al menú de pausa
+$('mon').onclick = e => { const s = e.target.closest('.mn'); if (s) nota(s.title); }; // En móvil, tocar una moneda muestra su nombre
