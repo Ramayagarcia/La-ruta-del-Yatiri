@@ -1,0 +1,80 @@
+* { box-sizing: border-box; margin: 0; padding: 0; } /* Reinicia márgenes y rellenos */
+body { height: 100dvh; overflow: hidden; background: #0b3d66; font-family: Arial, sans-serif; color: #fff; } /* Fondo océano, sin scroll */
+#mapa { position: fixed; inset: 0; width: 100%; height: 100%; } /* Mapa ocupa toda la pantalla */
+.oculto { display: none !important; } /* Clase para esconder elementos */
+.capa, .modal { position: fixed; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; } /* Base de capas */
+.capa { inset: 0; background: rgba(5, 20, 40, .55); } /* Inicio: velo oscuro sobre el mapa */
+.capa h1 { font-size: clamp(30px, 7vw, 64px); text-shadow: 0 4px 12px #000; } /* Título grande y sobrepuesto */
+.modal { top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(94vw, 560px); max-height: 94dvh; overflow: auto; background: #fffffff2; color: #172033; padding: 16px; border-radius: 18px; z-index: 5; } /* Ventanas centradas */
+button, input { padding: 10px 16px; border-radius: 10px; border: 2px solid #2563eb; font-size: 16px; } /* Estilo común */
+button { background: #2563eb; color: #fff; font-weight: bold; cursor: pointer; } /* Botones azules */
+button:hover { filter: brightness(1.15); } /* Efecto al pasar el cursor */
+#hud { position: fixed; top: 6px; left: 6px; right: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #000a; padding: 6px 10px; border-radius: 12px; z-index: 3; } /* Barra superior */
+#hud button { padding: 6px 10px; font-size: 14px; } /* Botones pequeños del HUD */
+.barra { display: inline-block; width: 90px; height: 12px; background: #444; border-radius: 8px; overflow: hidden; vertical-align: middle; margin-left: 4px; } /* Fondo de barra */
+.barra i { display: block; height: 100%; width: 100%; background: #22c55e; } /* Relleno de barra */
+#bCom { background: #f59e0b; } /* Barra de comida naranja */
+#pj { position: fixed; left: 10px; bottom: 10px; width: clamp(60px, 14vh, 110px); z-index: 3; filter: drop-shadow(0 4px 6px #000); } /* Personaje abajo a la izquierda */
+#pj.aura { filter: drop-shadow(0 0 12px gold); } /* Brillo con el Amarre del Yatiri */
+#sil { background: #f8fafc; border-radius: 12px; max-width: 100%; } /* Fondo de la silueta */
+#qOps { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; } /* Opciones en fila */
+#qOps button { background: #fff; color: #172033; } /* Opciones blancas */
+#qOps img { width: 110px; display: block; } /* Tamaño de las banderas */
+#qHint { color: #9a3412; } /* Pista naranja */
+#qMsg { font-weight: bold; min-height: 20px; } /* Mensaje de respuesta */
+.item { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 8px; border-radius: 10px; margin: 6px 0; width: 100%; } /* Fila de mejora */
+.popup { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(22px, 5vw, 44px); font-weight: bold; color: gold; text-shadow: 0 3px 8px #000; z-index: 9; animation: sube 2.5s forwards; pointer-events: none; text-align: center; } /* Animación de compra */
+@keyframes sube { 0% { opacity: 0; transform: translate(-50%, 0) scale(.5); } 20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } 100% { opacity: 0; transform: translate(-50%, -200%) scale(1); } } /* Sube y se desvanece */
+#girar { display: none; position: fixed; inset: 0; z-index: 20; background: #000; align-items: center; justify-content: center; font-size: 26px; text-align: center; padding: 20px; } /* Aviso de girar */
+@media (orientation: portrait) and (max-width: 900px) { #girar { display: flex; } } /* Solo en móviles verticales */
+@media (max-height: 500px) { .modal { padding: 8px; } #sil { width: auto; height: 90px; } #qOps img { width: 70px; } h2 { font-size: 16px; } } /* Móvil horizontal: compacta */
+.ic { display: inline-block; vertical-align: middle; } /* Contenedor de un logo */
+.ic svg { width: 100%; height: 100%; filter: drop-shadow(0 1px 1px #0006); } /* El logo llena su contenedor */
+#mon { display: flex; align-items: center; gap: 4px; } /* Monedas alineadas con su logo */
+.item b { flex: 1; margin-left: 8px; text-align: left; } /* Nombre de la mejora junto al logo */
+/* ===== ESTILO CONSOLA RETRO / PIXELADO ===== */
+body { font-family: 'Press Start 2P', monospace; font-size: 11px; background: #0b0b1e; } /* Fuente de 8 bits */
+#mapa { image-rendering: pixelated; } /* El mapa se ve en pixeles grandes */
+h1, h2, h3 { line-height: 1.5; } /* Interlineado cómodo */
+h2 { font-size: 13px; } h3 { font-size: 10px; } /* Títulos pequeños */
+.modal { background: #1a1a2e; color: #e0ffe0; border: 4px solid #fff; box-shadow: 0 0 0 4px #000, 8px 8px 0 4px #000a; } /* Ventanas estilo consola */
+button, input { font-family: inherit; font-size: 10px; border: 4px solid #fff; background: #3b3bd6; box-shadow: 4px 4px 0 #000; text-transform: uppercase; } /* Botones de 8 bits */
+button:active { transform: translate(4px, 4px); box-shadow: none; } /* Se hunde al presionar */
+input { background: #000; color: #7cfc00; } /* Campo tipo terminal verde */
+#qOps button { background: #2a2a40; } /* Opciones oscuras */
+#hud { background: #000; border: 4px solid #fff; } /* Barra superior retro */
+.barra { height: 14px; border: 2px solid #fff; background: #222; } /* Barras con borde */
+.item { background: #2a2a40; border: 3px solid #fff; } /* Filas de la tienda */
+#qHint { color: #ffb86b; } /* Pista */
+.capa { background: rgba(0, 0, 30, .6); } /* Velo del inicio */
+.capa h1 { font-size: clamp(20px, 5vw, 44px); color: #ffd700; text-shadow: 4px 4px 0 #b00020, 8px 8px 0 #000; line-height: 1.4; } /* Título arcade */
+.popup { font-family: inherit; text-shadow: 3px 3px 0 #000; } /* Animaciones pixeladas */
+#sil { background: #9bbc0f; border: 4px solid #fff; image-rendering: pixelated; } /* Silueta en pantalla verde Game Boy */
+#pj svg, .ic svg { shape-rendering: crispEdges; } /* Logos y personaje con bordes duros */
+.nota { position: fixed; right: 8px; bottom: 8px; z-index: 30; font-size: 8px; background: #000; color: #7cfc00; border: 2px solid #7cfc00; padding: 4px 6px; pointer-events: none; } /* Aviso pequeño en la esquina */
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .18) 0 2px, transparent 2px 4px); } /* Líneas de pantalla antigua */
+/* ===== ESTILO NINTENDO 64: colores vivos, biseles y contornos gruesos ===== */
+body { font-family: 'Lilita One', 'Arial Black', sans-serif; font-size: 15px; background: radial-gradient(circle at 50% 30%, #35b6ff, #0a4bb5); } /* Océano azul brillante y fuente redondeada */
+body::after { display: none; } /* Quita las líneas de pantalla */
+#mapa, #sil { image-rendering: auto; } /* Dibujo suave y nítido */
+#pj svg, .ic svg { shape-rendering: auto; } /* Logos suaves */
+h1, h2, h3, .popup, #hud, button { text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; } /* Letras con contorno negro */
+h2 { font-size: 22px; color: #fff; } h3 { font-size: 15px; color: #ffe14d; } /* Títulos de ventana */
+.modal { background: linear-gradient(#2f6fe0, #12308f); color: #fff; border: 4px solid #fff; border-radius: 22px; box-shadow: 0 0 0 4px #000, 0 12px 0 4px #000a, inset 0 4px 0 #ffffff55; } /* Ventana azul con bisel */
+button, input { font-family: inherit; font-size: 16px; text-transform: none; border: 3px solid #000; border-radius: 14px; background: linear-gradient(#ff6b5e, #d3151c); color: #fff; box-shadow: inset 0 3px 0 #ffffff99, inset 0 -4px 0 #0004, 0 4px 0 #000; } /* Botones rojos con relieve */
+button:hover { filter: brightness(1.15); transform: translateY(-2px); } /* Se levanta al pasar el cursor */
+button:active { transform: translateY(3px); box-shadow: inset 0 3px 0 #ffffff99, 0 1px 0 #000; } /* Se hunde al presionar */
+#bTienda, #bNueva { background: linear-gradient(#ffe45c, #f2a900); color: #3a2500; text-shadow: none; } /* Botones amarillos */
+#bCont, #pGuardar { background: linear-gradient(#5be36b, #159a2a); } /* Botones verdes */
+#qOps button { background: linear-gradient(#fff, #cfe0ff); color: #12308f; text-shadow: none; } /* Opciones blancas */
+input { background: #fff; color: #12308f; text-shadow: none; box-shadow: inset 0 3px 0 #0003; } /* Campo de texto claro */
+#hud { background: linear-gradient(#2f6fe0, #12308f); border: 3px solid #fff; border-radius: 18px; box-shadow: 0 0 0 3px #000, 0 5px 0 3px #000a; } /* Barra superior N64 */
+.barra { height: 14px; border: 2px solid #000; border-radius: 10px; background: #222; } /* Barras redondeadas */
+.item { background: #ffffff22; border: 2px solid #fff; border-radius: 14px; } /* Filas de la tienda */
+#qHint { color: #ffe14d; } /* Pista amarilla */
+#qMsg { color: #fff; } /* Mensajes blancos */
+.capa { background: radial-gradient(circle, #0000 30%, #00104088); } /* Viñeta suave sobre el mapa */
+.capa h1 { font-size: clamp(34px, 8vw, 78px); line-height: 1.1; background: linear-gradient(#fff36b, #ff8a00); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 3px #12308f; text-shadow: none; filter: drop-shadow(0 6px 0 #000); animation: flota 2.5s ease-in-out infinite; } /* Logo gigante tipo N64 */
+@keyframes flota { 50% { transform: translateY(-8px) rotate(-1.500deg); } } /* El título flota */
+#sil { background: #dff3ff; border: 4px solid #fff; border-radius: 16px; } /* Silueta en recuadro claro */
+.nota { background: #12308f; color: #fff; border: 2px solid #fff; border-radius: 10px; font-size: 12px; } /* Aviso de guardado pequeño */

@@ -1,0 +1,65 @@
+<!DOCTYPE html> <!-- Documento HTML5 -->
+<html lang="es"> <!-- Idioma español -->
+<head> <!-- Configuración de la página -->
+<meta charset="UTF-8"> <!-- Permite tildes y ñ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta a cualquier pantalla -->
+<title>Ruta del Yatiri</title> <!-- Título de la pestaña -->
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet"> <!-- Fuente redondeada estilo N64 -->
+<link rel="stylesheet" href="style.css"> <!-- Conecta el CSS -->
+</head> <!-- Fin del head -->
+<body> <!-- Contenido visible -->
+<canvas id="mapa"></canvas> <!-- Mapa mundi real dibujado por JavaScript -->
+<div id="girar">📱 Gira tu celular en horizontal</div> <!-- Aviso para móviles en vertical -->
+<div id="hud" class="oculto"> <!-- Barra superior del juego -->
+<b id="nombreJ"></b> <!-- Nombre del personaje -->
+<span>❤️<div class="barra"><i id="bVida"></i></div></span> <!-- Barra de vida -->
+<span>🍖<div class="barra"><i id="bCom"></i></div></span> <!-- Barra de comida -->
+<span id="mon"></span> <!-- Oro, legumbres y hojas de coca -->
+<button id="bTienda">🛒 Tienda</button> <!-- Abre la tienda -->
+<button id="bPausa">⏸️</button> <!-- Abre la pausa -->
+</div>
+<div id="pj" class="oculto"> <!-- Contenedor del personaje -->
+<svg viewBox="0 0 100 140"> <!-- Dibujo del explorador español -->
+<ellipse cx="50" cy="40" rx="32" ry="9" fill="#222"/> <!-- Ala del sombrero -->
+<path d="M30 40Q50 2 70 40Z" fill="#222"/> <!-- Copa del sombrero -->
+<circle cx="50" cy="52" r="14" fill="#f1c9a0"/> <!-- Rostro -->
+<path d="M38 56Q50 82 62 56Q50 62 38 56Z" fill="#5a3a1a"/> <!-- Barba -->
+<rect x="30" y="68" width="40" height="8" rx="4" fill="#fff"/> <!-- Gorguera blanca -->
+<rect id="tun" x="32" y="74" width="36" height="38" rx="8" fill="#8b5a2b"/> <!-- Túnica (cambia con la comida) -->
+<rect x="36" y="112" width="10" height="24" fill="#333"/> <!-- Pierna izquierda -->
+<rect x="54" y="112" width="10" height="24" fill="#333"/> <!-- Pierna derecha -->
+<svg id="arma" x="62" y="72" width="38" height="38" viewBox="0 0 32 32"></svg> <!-- Arma equipada (mismo logo de la tienda) -->
+</svg>
+</div>
+<section id="inicio" class="capa"> <!-- Pantalla de inicio sobre el mapa -->
+<h1>🌿 Ruta del Yatiri</h1> <!-- Nombre del juego -->
+<p id="carga">Cargando mapa...</p> <!-- Mensaje mientras carga el mapa -->
+<input id="nom" placeholder="Nombre de tu explorador" maxlength="15"> <!-- Pide el nombre -->
+<button id="bNueva">🚀 Nueva partida</button> <!-- Empieza de cero -->
+<button id="bCont">📂 Continuar</button> <!-- Carga la partida guardada -->
+</section>
+<section id="quiz" class="modal oculto"> <!-- Ventana de preguntas -->
+<h3 id="qN"></h3> <!-- Número de pregunta -->
+<h2 id="qT"></h2> <!-- Texto de la pregunta -->
+<canvas id="sil"></canvas> <!-- Silueta del país -->
+<div id="qOps"></div> <!-- Opciones (banderas, V/F, presidentes) -->
+<input id="qIn" placeholder="Escribe aquí..."> <!-- Respuesta escrita -->
+<button id="qBtn">Responder</button> <!-- Envía la respuesta escrita -->
+<p id="qHint"></p> <!-- Pista del armamento -->
+<p id="qMsg"></p> <!-- Mensaje de acierto o error -->
+<button id="qCerrar">Salir del país</button> <!-- Abandona el país -->
+</section>
+<section id="tienda" class="modal oculto"> <!-- Ventana de la tienda -->
+<h2>🛒 Tienda de mejoras</h2> <!-- Título -->
+<div id="items"></div> <!-- Mejoras generadas por JavaScript -->
+<button id="tCerrar">Cerrar</button> <!-- Cierra la tienda -->
+</section>
+<section id="pausa" class="modal oculto"> <!-- Menú de pausa -->
+<h2>⏸️ Pausa</h2> <!-- Título -->
+<button id="pCont">▶️ Continuar</button> <!-- Reanuda -->
+<button id="pGuardar">💾 Guardar partida</button> <!-- Guarda -->
+<button id="pSalir">🚪 Salir</button> <!-- Vuelve al inicio -->
+</section>
+<script src="script.js"></script> <!-- Conecta el JavaScript -->
+</body> <!-- Fin del cuerpo -->
+</html> <!-- Fin del documento -->
