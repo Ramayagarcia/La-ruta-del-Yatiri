@@ -20,16 +20,19 @@
 </div>
 <div id="pj" class="oculto"> <!-- Contenedor del personaje -->
 <svg viewBox="0 0 100 140"> <!-- Dibujo del explorador español -->
-<ellipse cx="50" cy="40" rx="32" ry="9" fill="#222"/> <!-- Ala del sombrero -->
-<path d="M30 40Q50 2 70 40Z" fill="#222"/> <!-- Copa del sombrero -->
+<ellipse id="sb" cx="50" cy="40" rx="32" ry="9" fill="#222"/> <!-- Ala del sombrero -->
+<path id="sc" d="M30 40Q50 2 70 40Z" fill="#222"/> <!-- Copa del sombrero -->
 <circle cx="50" cy="52" r="14" fill="#f1c9a0"/> <!-- Rostro -->
 <path d="M38 56Q50 82 62 56Q50 62 38 56Z" fill="#5a3a1a"/> <!-- Barba -->
+<path id="chulu" style="display:none" d="M28 48Q28 18 50 16Q72 18 72 48L72 66L63 66L63 46L37 46L37 66L28 66Z" fill="#e53935" stroke="#ffd700" stroke-width="2"/> <!-- Ch’ulu andino con orejeras -->
 <rect x="30" y="68" width="40" height="8" rx="4" fill="#fff"/> <!-- Gorguera blanca -->
 <rect id="tun" x="32" y="74" width="36" height="38" rx="8" fill="#8b5a2b"/> <!-- Túnica (cambia con la comida) -->
+<path id="poncho" style="display:none" d="M24 72L50 66L76 72L84 114L16 114Z" fill="#b71c1c" stroke="#ffd700" stroke-width="3"/> <!-- Poncho andino -->
 <rect x="36" y="112" width="10" height="24" fill="#333"/> <!-- Pierna izquierda -->
 <rect x="54" y="112" width="10" height="24" fill="#333"/> <!-- Pierna derecha -->
 <svg id="arma" x="62" y="72" width="38" height="38" viewBox="0 0 32 32"></svg> <!-- Arma equipada (mismo logo de la tienda) -->
 </svg>
+<span id="mascs"></span> <!-- Mascotas conseguidas junto al personaje -->
 </div>
 <section id="inicio" class="capa"> <!-- Pantalla de inicio sobre el mapa -->
 <h1>🌿 Ruta del Yatiri</h1> <!-- Nombre del juego -->
@@ -58,30 +61,56 @@
 <h2>⏸️ Pausa</h2> <!-- Título -->
 <button id="pCont">▶️ Continuar</button> <!-- Reanuda -->
 <button id="pGuardar">💾 Guardar partida</button> <!-- Guarda -->
+<button id="pAyuda">📖 Instrucciones</button> <!-- Relee las instrucciones -->
+<button id="pMasc">🐾 Mascotas</button> <!-- Mascotas desbloqueadas -->
 <button id="pConsejos">💡 Consejos</button> <!-- Abre los consejos de monedas -->
 <button id="pSalir">🚪 Salir</button> <!-- Vuelve al inicio -->
+</section>
+<section id="conf" class="modal oculto"> <!-- Confirmación de compra -->
+<h2>¿Comprar esta mejora?</h2> <!-- Título -->
+<div id="cTxt" class="txt"></div> <!-- Descripción de la mejora -->
+<button id="cSi">✅ Comprar</button> <!-- Confirma -->
+<button id="cNo" onclick="this.parentNode.classList.add('oculto')">Cancelar</button> <!-- Cancela -->
+</section>
+<section id="evento" class="modal oculto"> <!-- Ataque sorpresa -->
+<h2 id="eT"></h2> <!-- Mensaje del ataque -->
+<p id="eQ"></p> <!-- Pregunta -->
+<div id="eOps"></div> <!-- Opciones -->
+<p id="eMsg"></p> <!-- Resultado -->
+<button id="eCont" class="oculto">Continuar</button> <!-- Cierra el evento -->
+</section>
+<section id="mascotas" class="modal oculto"> <!-- Mascotas -->
+<h2>🐾 Mascotas en peligro de extinción</h2> <!-- Título -->
+<div id="mLista" class="txt" style="width:100%"></div> <!-- Lista generada por JavaScript -->
+<button id="mCerrar">Cerrar</button> <!-- Cierra -->
 </section>
 <div id="alerta" class="oculto"></div> <!-- Advertencia de vida o comida baja -->
 <section id="ayuda" class="modal oculto"> <!-- Instrucciones de la primera vez -->
 <h2>🌿 Cómo jugar</h2> <!-- Título -->
 <div class="txt"> <!-- Texto de ayuda -->
-1️⃣ Toca un país del mapa para viajar. El primero es libre; después solo los vecinos (en verde claro).<br> <!-- Paso 1 -->
-2️⃣ Responde 5 preguntas: silueta, bandera, capital, verdadero/falso y presidente. Si fallas, no avanzas.<br> <!-- Paso 2 -->
-3️⃣ Ganas monedas y el país se pinta con el color de su bandera.<br> <!-- Paso 3 -->
-4️⃣ Cada país gasta vida y comida. Sin comida pierdes vida; sin vida, ¡game over!<br> <!-- Paso 4 -->
-5️⃣ En la 🛒 Tienda compras armas (pistas y saltos de preguntas), comida y botiquines.<br> <!-- Paso 5 -->
-6️⃣ Guarda tu partida desde ⏸️ Pausa. Allí también hay consejos. <!-- Paso 6 -->
+1️⃣ Toca un país del mapa para viajar. El primero es libre; después elige un vecino (verde claro) y, si no tiene, cualquier país libre.<br> <!-- Paso 1 -->
+2️⃣ Cada país tiene 5 preguntas sobre ese país: escribe su nombre por la silueta, elige su bandera y responde 3 más de historia o geografía. Si fallas, repites hasta acertar.<br> <!-- Paso 2 -->
+3️⃣ Cada acierto al primer intento da 3 🪙 y 18 🫘. Si aciertas las 5 sin fallar, bonus de +5 🪙 y +10 🫘 (20 y 100 en total).<br> <!-- Paso 3 -->
+4️⃣ Acertar cuesta 3 de comida; fallar cuesta 3 de vida y 5 de comida. Sin comida pierdes vida; sin vida, ¡game over!<br> <!-- Paso 4 -->
+5️⃣ En la 🛒 Tienda compras armas (pistas y saltos de preguntas), canastas y botiquines. Algunas piden comprar antes la anterior.<br> <!-- Paso 5 -->
+6️⃣ ⚠️ <b>Ataques sorpresa:</b> piratas, tribus o bandidos pueden atacarte cada 5 a 8 minutos. Responde una pregunta de cultura general: si fallas pierdes 10 🪙 y 40 🫘. Si pasa mientras exploras un país, ese país se reinicia y pierdes la bonificación.<br> <!-- Paso 6 -->
+7️⃣ Cada 5 países perfectos ganas 1 🌿 hoja de coca. Guarda desde ⏸️ Pausa, donde también puedes releer estas instrucciones.<br> <!-- Paso 7 -->
+8️⃣ 🌍 Al explorar todos los países de un continente ganas 150 🪙, 1000 🫘, 2 🌿 y una mascota en peligro de extinción. Mira tus mascotas en 🐾 Pausa. <!-- Paso 8 -->
 </div>
 <button id="aOk">¡Entendido!</button> <!-- Cierra las instrucciones -->
 </section>
 <section id="consejos" class="modal oculto"> <!-- Consejos para conseguir monedas -->
 <h2>💡 Consejos</h2> <!-- Título -->
 <div class="txt"> <!-- Texto de consejos -->
-🪙 <b>Oro:</b> explora un país al primer intento (+10 oro y +50 legumbres).<br> <!-- Cómo ganar oro -->
-🫘 <b>Legumbres:</b> +50 al explorar al primer intento y +30 si necesitaste más intentos.<br> <!-- Cómo ganar legumbres -->
-🌿 <b>Hoja de coca:</b> 1 por cada 5 países explorados al primer intento. Es la más valiosa.<br> <!-- Cómo ganar coca -->
-🔫 Con el AK-47 cada país da +80 legumbres y +2 oro.<br> <!-- Bonus del nivel 5 -->
-🍖 Si te quedas sin comida pierdes vida: compra canastas a tiempo.<br> <!-- Consejo de comida -->
+🪙 <b>Oro:</b> +3 por pregunta acertada al primer intento; +5 extra si aciertas las 5.<br> <!-- Oro -->
+🫘 <b>Legumbres:</b> +18 por pregunta acertada; +10 extra por país perfecto.<br> <!-- Legumbres -->
+🌿 <b>Hoja de coca:</b> 1 por cada 5 países perfectos (sin fallos, sin ataques fallados y sin AK-47).<br> <!-- Coca -->
+⚔️ <b>Armas:</b> la lanza da pista en la 1ª pregunta, el cuchillo la salta, el machete y la espada saltan más y dan pistas. Las saltadas cuentan como acertadas. El AK-47 (5 hojas de coca) las salta todas.<br> <!-- Armas -->
+🏴‍☠️ <b>Ataques sorpresa:</b> responde bien para no perder 10 🪙 y 40 🫘. Si fallas mientras exploras, el país se reinicia sin bonificación. Ten monedas de reserva.<br> <!-- Eventos -->
+🍖 <b>Canastas:</b> para desbloquear la siguiente, compra 5 veces la anterior. Sin comida pierdes vida.<br> <!-- Comida -->
+❤️ <b>Salud:</b> el botiquín de hospital siempre está disponible; tras comprar 5 se desbloquea el Amarre del Yatiri (ch’ulu, poncho y sin pérdida de vida por hambre).<br> <!-- Salud -->
+🌍 <b>Continentes:</b> completa todos sus países para ganar 150 🪙, 1000 🫘, 2 🌿 y una mascota. Las descripciones quedan en 🐾 Mascotas.<br> <!-- Continentes -->
+⚠️ <b>Cuidado:</b> cada error cuesta 3 de vida y 5 de comida.<br> <!-- Aviso -->
 </div>
 <button id="cOk">Volver</button> <!-- Regresa a la pausa -->
 </section>
