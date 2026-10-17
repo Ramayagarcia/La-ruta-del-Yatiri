@@ -43,21 +43,22 @@ const IC = { // Logos vectoriales de monedas y mejoras
   sv('<circle cx="16" cy="16" r="14.500" fill="#4a148c" stroke="gold" stroke-width="2"/><path d="M13 6H19V10H23V13H26V19H23V22H19V26H13V22H9V19H6V13H9V10H13Z" fill="gold"/><circle cx="16" cy="16" r="3" fill="#4a148c"/>') // Amarre del Yatiri (chakana)
  ]
 };
-const RG = { 'Africa': 'África', 'North America': 'Norteamérica', 'South America': 'Sudamérica', 'Asia': 'Asia', 'Europe': 'Europa', 'Oceania': 'Oceanía' }; // Continentes en español
+const RG = { 'Africa': 'África', 'North America': 'Norteamérica', 'South America': 'Sudamérica', 'Asia': 'Asia', 'Europe': 'Europa', 'Oceania': 'Oceanía', 'Central America': 'Centroamérica' }; // Continentes en español
 const CAP = Object.fromEntries('AFG:Kabul|ALB:Tirana|DZA:Argel|AND:Andorra la Vieja|AGO:Luanda|ATG:Saint John’s|ARM:Ereván|AUS:Canberra|AUT:Viena|AZE:Bakú|BHS:Nasáu|BHR:Manama|BGD:Daca|BRB:Bridgetown|BLR:Minsk|BEL:Bruselas|BLZ:Belmopán|BEN:Porto Novo|BTN:Timbu|BIH:Sarajevo|BWA:Gaborone|BRN:Bandar Seri Begawan|BGR:Sofía|BFA:Uagadugú|BDI:Gitega|KHM:Nom Pen|CMR:Yaundé|CAN:Ottawa|CPV:Praia|CAF:Bangui|TCD:Yamena|COL:Bogotá|COM:Moroni|COD:Kinsasa|COG:Brazzaville|CRI:San José|CIV:Yamusukro|HRV:Zagreb|CUB:La Habana|CYP:Nicosia|CZE:Praga|DNK:Copenhague|DJI:Yibuti|DMA:Roseau|DOM:Santo Domingo|ECU:Quito|SLV:San Salvador|GNQ:Malabo|ERI:Asmara|EST:Tallin|SWZ:Mbabane|ETH:Adís Abeba|FJI:Suva|FIN:Helsinki|GAB:Libreville|GMB:Banjul|GEO:Tiflis|DEU:Berlín|GHA:Acra|GRC:Atenas|GRD:Saint George’s|GTM:Ciudad de Guatemala|GIN:Conakri|GNB:Bisáu|GUY:Georgetown|HTI:Puerto Príncipe|HND:Tegucigalpa|HUN:Budapest|ISL:Reikiavik|IND:Nueva Delhi|IDN:Yakarta|IRN:Teherán|IRQ:Bagdad|IRL:Dublín|ISR:Jerusalén|ITA:Roma|JAM:Kingston|JPN:Tokio|JOR:Amán|KAZ:Astaná|KEN:Nairobi|KIR:Tarawa|PRK:Pionyang|KOR:Seúl|KWT:Kuwait|KGZ:Biskek|LAO:Vientián|LVA:Riga|LBN:Beirut|LSO:Maseru|LBR:Monrovia|LBY:Trípoli|LIE:Vaduz|LTU:Vilna|LUX:Luxemburgo|MDG:Antananarivo|MWI:Lilongüe|MYS:Kuala Lumpur|MDV:Malé|MLI:Bamako|MLT:La Valeta|MHL:Majuro|MRT:Nuakchot|MUS:Port Louis|FSM:Palikir|MDA:Chisinau|MCO:Mónaco|MNG:Ulán Bator|MNE:Podgorica|MAR:Rabat|MOZ:Maputo|MMR:Naipyidó|NAM:Windhoek|NRU:Yaren|NPL:Katmandú|NLD:Ámsterdam|NZL:Wellington|NIC:Managua|NER:Niamey|NGA:Abuya|MKD:Skopie|NOR:Oslo|OMN:Mascate|PAK:Islamabad|PLW:Ngerulmud|PAN:Panamá|PNG:Port Moresby|PER:Lima|PHL:Manila|POL:Varsovia|PRT:Lisboa|QAT:Doha|ROU:Bucarest|RWA:Kigali|KNA:Basseterre|LCA:Castries|VCT:Kingstown|WSM:Apia|SMR:San Marino|STP:Santo Tomé|SAU:Riad|SEN:Dakar|SRB:Belgrado|SYC:Victoria|SLE:Freetown|SGP:Singapur|SVK:Bratislava|SVN:Liubliana|SLB:Honiara|SOM:Mogadiscio|ZAF:Pretoria|SSD:Yuba|LKA:Sri Jayawardenapura Kotte|SDN:Jartum|SUR:Paramaribo|SWE:Estocolmo|CHE:Berna|SYR:Damasco|TWN:Taipéi|TJK:Dusambé|TZA:Dodoma|THA:Bangkok|TLS:Dili|TGO:Lomé|TON:Nukualofa|TTO:Puerto España|TUN:Túnez|TUR:Ankara|TKM:Asjabad|TUV:Funafuti|UGA:Kampala|UKR:Kiev/Kyiv|ARE:Abu Dabi|GBR:Londres|UZB:Taskent|VUT:Port Vila|VAT:Ciudad del Vaticano|VEN:Caracas|VNM:Hanoi|YEM:Saná|ZMB:Lusaka|ZWE:Harare|GRL:Nuuk|PSX:Ramala|GUF:Cayena|PRI:San Juan|FLK:Stanley|NCL:Numea|PYF:Papeete|KOS:Pristina|SAH:El Aaiún'.split('|').map(s => s.split(':'))); // Capital de cada país por código
 const imgPJ = new Image(); imgPJ.onload = () => pintar(); // Imagen del personaje para el mapa
 const UP = { // Mejoras: nombres y precios (g=oro, l=legumbres, c=coca)
- arma: { n: ['Lanza de madera','Cuchillo','Machete','Espada','AK-47'], c: [{g:50,l:500},{g:100,l:1000},{g:200,l:2000},{g:280,l:3500},{c:5}] }, // Armamento
- comida: { n: ['Canasta básica','Canasta clase media','Canasta clase alta'], c: [{g:35,l:500},{g:105,l:2000},{c:4}] }, // Comida
- botiq: { n: ['Botiquín de hospital','Amarre del Yatiri'], c: [{g:500,l:1750},{c:10,g:5000,l:1000000}] } // Botiquines
+ arma: { n: ['Lanza de madera','Cuchillo','Machete','Espada','AK-47'], c: [{g:40,l:200},{g:90,l:450},{g:180,l:900},{g:350,l:1750},{c:10}] }, // Armamento
+ comida: { n: ['Canasta básica','Canasta clase media','Canasta clase alta'], c: [{g:25,l:125},{g:75,l:375},{c:2,g:200,l:1000}] }, // Comida
+ botiq: { n: ['Botiquín de hospital','Amarre del Yatiri'], c: [{g:300,l:1500},{c:4,g:1500,l:7500}] } // Botiquines
 };
+Object.keys(UP).forEach(k => UP[k].c.forEach((c, i) => { if (k == 'arma' && i == 4) return; ['g', 'l'].forEach(m => { if (c[m]) c[m] = Math.round(c[m] * 1.5); }); if (c.c) c.c = Math.ceil(c.c * 1.5); })); // Precios +50% (el AK-47 queda en 10 hojas)
 const H = [[],[0],[],[1,2],[2,3,4],[]]; // Preguntas con pista según nivel de arma
 const SK = [0,0,1,1,2,5]; // Preguntas que se saltan según nivel de arma
 const MON = { g: 'oro', l: 'leg', c: 'coca' }; // Traduce moneda a campo guardado
-let S = null, geo = [], jugando = false, Q = null, V = {}; // Estado, países del mapa, si juega, pregunta actual
+let vz = 1, vu = .5, vv = .5, finAnim = false, S = null, geo = [], jugando = false, Q = null, V = {}; // Estado, países del mapa, si juega, pregunta actual
 // ---------- MAPA ----------
-const px = (lo, la) => [(lo + 180) / 360 * cv.width, (83 - la) / 141 * cv.height]; // Coordenadas geográficas a píxeles
-const inv = (x, y) => [x / cv.width * 360 - 180, 83 - y / cv.height * 141]; // Píxeles a coordenadas geográficas
+const px = (lo, la) => [((lo + 180) / 360 - vu) * vz * cv.width + cv.width / 2, ((83 - la) / 141 - vv) * vz * cv.height + cv.height / 2]; // Coordenadas geográficas a píxeles
+const inv = (x, y) => [((x - cv.width / 2) / (vz * cv.width) + vu) * 360 - 180, 83 - ((y - cv.height / 2) / (vz * cv.height) + vv) * 141]; // Píxeles a coordenadas geográficas
 fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson') // Descarga el mapamundi real
  .then(r => r.json()) // Convierte a objeto
  .then(j => { // Cuando llega
@@ -66,7 +67,7 @@ fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geo
   if (fr) { const gu = fr.polys.filter(po => po[0][0][0] < -45 && po[0][0][1] > 0 && po[0][0][1] < 10); if (gu.length) { fr.polys = fr.polys.filter(po => !gu.includes(po)); geo.push({ id: 'GUF', nom: 'Guayana Francesa', iso: 'GF', cont: 'South America', polys: gu }); } } // La Guayana Francesa pasa a ser un país aparte
   return Promise.resolve().then(() => { // Crea los países jugables desde el propio mapa
    geo.forEach(g => { const cap = CAP[g.id]; if (!cap || !g.iso || g.iso == '-99' || P.some(p => p[0] == g.id)) return; P.push([g.id, g.nom, g.iso.toLowerCase(), cap, 'hsl(' + (g.id.charCodeAt(0) * 37 + g.id.charCodeAt(2) * 11) % 360 + ',60%,50%)', null, null, null, g.cont]); }); // Agrega cada país del mundo
-   P.forEach(p => { const g = geo.find(x => x.id == p[0]); if (g && !p[8]) p[8] = g.cont; }); // Los países con datos propios también reciben su continente
+   P.forEach(p => { const g = geo.find(x => x.id == p[0]); if (g && !p[8]) p[8] = g.cont; }); const CA = 'BLZ GTM HND SLV NIC CRI PAN CUB HTI DOM JAM BHS BRB TTO ATG DMA GRD KNA LCA VCT PRI'.split(' '); P.forEach(p => { if (CA.includes(p[0])) p[8] = 'Central America'; }); // Centroamérica y el Caribe cuentan como un continente // Los países con datos propios también reciben su continente
   const celdas = {}; // Puntos de las fronteras agrupados por posición
   geo.forEach(g => g.polys.forEach(po => po.forEach(r => r.forEach(c => { const k = Math.round(c[0] * 10) + ',' + Math.round(c[1] * 10); (celdas[k] = celdas[k] || new Set()).add(g.id); })))); // Registra qué países tocan cada punto
   Object.values(celdas).forEach(s => s.forEach(a => s.forEach(b => { if (a != b) (V[a] = V[a] || new Set()).add(b); }))); // Dos países en el mismo punto son vecinos
@@ -78,9 +79,9 @@ function pintar() { // Dibuja el mapa completo
  cx.clearRect(0, 0, cv.width, cv.height); // Limpia el lienzo
  geo.forEach(g => { // Recorre cada país
   const p = P.find(x => x[0] == g.id); // Busca si es jugable
-  cx.fillStyle = S && p && S.ok[g.id] ? (typeof S.ok[g.id] == 'string' ? S.ok[g.id] : p[4]) : op.includes(g.id) ? '#d8ff3a' : '#3fae49'; // Bandera si explorado, verde claro si disponible, verde oscuro si no
+  cx.fillStyle = finAnim ? 'hsl(' + ((Date.now() / 15 + g.id.charCodeAt(0) * 13 + g.id.charCodeAt(1) * 7) % 360) + ',75%,55%)' : S && p && S.ok[g.id] ? (typeof S.ok[g.id] == 'string' ? S.ok[g.id] : p[4]) : op.includes(g.id) ? '#d8ff3a' : '#3fae49'; // Bandera si explorado, verde claro si disponible, verde oscuro si no
   cx.beginPath(); // Nuevo trazo
-  g.polys.forEach(po => po.forEach(r => r.forEach((c, i) => { const [x, y] = px(c[0], c[1]); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }))); // Traza contornos
+  g.polys.forEach(po => vis(po) && po.forEach(r => r.forEach((c, i) => { const [x, y] = px(c[0], c[1]); i ? cx.lineTo(x, y) : cx.moveTo(x, y); }))); // Traza contornos
   cx.shadowColor = '#0009'; cx.shadowOffsetX = 2; cx.shadowOffsetY = 4; cx.fill('evenodd'); cx.shadowColor = 'transparent'; cx.strokeStyle = '#0d3b1f'; cx.lineWidth = 1.2; cx.lineJoin = 'round'; cx.stroke(); // Rellena y dibuja borde
  });
  if (S && S.pos) { const [x, y] = px(S.pos[0], S.pos[1]); if (imgPJ.naturalWidth) { cx.shadowColor = '#0008'; cx.shadowOffsetY = 4; cx.drawImage(imgPJ, x - 15, y - 42, 30, 42); cx.shadowColor = 'transparent'; } } // Marca al jugador
@@ -94,7 +95,7 @@ function opciones() { // Países que se pueden explorar ahora
 function resize() { const h = $('hud').offsetHeight ? $('hud').offsetHeight + 10 : 0; cv.style.top = h + 'px'; cv.style.height = (innerHeight - h) + 'px'; cv.width = innerWidth; cv.height = innerHeight - h; pintar(); } // Ajusta el lienzo a la pantalla
 addEventListener('resize', resize); resize(); // Reajusta al cambiar tamaño y al iniciar
 function dentro(pt, r) { let d = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) if ((r[i][1] > pt[1]) != (r[j][1] > pt[1]) && pt[0] < (r[j][0] - r[i][0]) * (pt[1] - r[i][1]) / (r[j][1] - r[i][1]) + r[i][0]) d = !d; return d; } // ¿Punto dentro del polígono?
-cv.addEventListener('pointerdown', e => { // Al tocar o hacer clic en el mapa
+function tocar(e) { // Al tocar o hacer clic en el mapa (sin arrastrar)
  if (!jugando || document.querySelector('.modal:not(.oculto)')) return; // Ignora si no juega o hay ventana
  const pt = inv(e.clientX * cv.width / innerWidth, (e.clientY - cv.getBoundingClientRect().top) * cv.height / cv.clientHeight); // Convierte clic a coordenadas
  const g = geo.find(g => g.polys.some(po => dentro(pt, po[0]))); // Busca el país tocado
@@ -104,10 +105,11 @@ cv.addEventListener('pointerdown', e => { // Al tocar o hacer clic en el mapa
  if (S.ok[g.id]) return aviso('✅ Ya exploraste ' + p[1]); // Ya explorado
  if (!opciones().includes(g.id)) return aviso('🚫 Debe compartir frontera con ' + P.find(x => x[0] == S.ult)[1]); // Solo países vecinos
  S.pos = pt; pintar(); iniciarPais(p); // Mueve al personaje y empieza el desafío
-});
+}
 // ---------- INTERFAZ ----------
 function aviso(t) { const d = document.createElement('div'); d.className = 'popup'; d.innerHTML = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2500); } // Mensaje animado
 function hud() { // Actualiza barras y monedas
+ $('bSig').classList.toggle('oculto', !(S.ult && P.some(x => !S.ok[x[0]] && V[S.ult] && V[S.ult].has(x[0])))); // 🧭 Siguiente solo si estás en un país con vecinos libres
  ['sb', 'sc'].forEach(i => $(i).style.display = S.yatiri ? 'none' : ''); ['poncho', 'chulu'].forEach(i => $(i).style.display = S.yatiri ? '' : 'none'); // Con el Yatiri: ch’ulu y poncho en vez del sombrero
  const s2 = $('pj').firstElementChild.cloneNode(true); s2.setAttribute('width', 30); s2.setAttribute('height', 42); // Copia reducida del personaje
  const uri = 'data:image/svg+xml,' + encodeURIComponent(new XMLSerializer().serializeToString(s2)); // La convierte en imagen
@@ -120,9 +122,9 @@ function hud() { // Actualiza barras y monedas
  $('mon').innerHTML = [['oro', 'Oro', S.oro], ['leg', 'Legumbres', S.leg], ['coca', 'Hoja de coca', S.coca]].map(m => `<span class="mn" title="${m[1]}">${ic(IC[m[0]], 22)} ${m[2]}</span>`).join(' '); // Monedas con logo; el nombre sale al pasar el cursor
  $('tun').setAttribute('fill', ['#8b5a2b','#a0522d','#6a1b9a','#d4af37'][S.comida]); // Túnica evoluciona
  $('arma').innerHTML = S.arma ? IC.arma[S.arma - 1] : ''; // El arma comprada aparece en el personaje
- $('pj').classList.toggle('aura', !!S.yatiri); $('mascs').textContent = S.pets.map(c => PET[c].e).join(''); const hh = $('hud').offsetHeight ? $('hud').offsetHeight + 10 : 0; if (cv.style.top != hh + 'px') resize(); // Brillo del Yatiri
+ $('pj').classList.toggle('aura', !!S.yatiri); $('mascs').innerHTML = S.pets.map(petSvg).join(''); const hh = $('hud').offsetHeight ? $('hud').offsetHeight + 10 : 0; if (cv.style.top != hh + 'px') resize(); // Brillo del Yatiri
 }
-function entrar() { ['inicio'].forEach(i => $(i).classList.add('oculto')); ['hud', 'pj'].forEach(i => $(i).classList.remove('oculto')); jugando = true; hud(); resize(); if (!S.ult) aviso('🌍 Elige tu primer país en el mapa'); if (!localStorage.getItem('yatiriAyuda2')) abrir('ayuda'); } // Pasa del inicio al juego
+function entrar() { ['inicio'].forEach(i => $(i).classList.add('oculto')); ['hud', 'pj', 'zoom'].forEach(i => $(i).classList.remove('oculto')); jugando = true; finAnim = !!S.fin; hud(); resize(); if (!S.ult) aviso('🌍 Elige tu primer país en el mapa'); if (!localStorage.getItem('yatiriAyuda2')) abrir('ayuda'); } // Pasa del inicio al juego
 $('bNueva').onclick = () => { // Nueva partida
  const n = $('nom').value.trim(); if (!n) return aviso('✍️ Escribe un nombre'); // Exige nombre
  S = { nombre: n, oro: 0, leg: 0, coca: 0, vida: 100, com: 100, arma: 0, comida: 0, botiq: 0, ok: {}, primeros: 0, yatiri: 0, pos: null, ult: null, cn: [0, 0, 0], bn: 0, cont: {}, pets: [] }; // Estado inicial
@@ -133,11 +135,11 @@ function guardar() { localStorage.setItem('yatiri', JSON.stringify(S)); nota('�
 const abrir = i => $(i).classList.remove('oculto'), cerrar = i => $(i).classList.add('oculto'); // Abrir y cerrar ventanas
 $('bPausa').onclick = () => abrir('pausa'); $('pCont').onclick = () => cerrar('pausa'); // Pausa y continuar
 $('pGuardar').onclick = guardar; // Botón guardar
-$('pSalir').onclick = () => { guardar(); cerrar('pausa'); jugando = false; ['hud', 'pj', 'alerta'].forEach(cerrar); abrir('inicio'); S = null; resize(); }; // Salir al inicio
-setInterval(() => { // Cada segundo
- if (!jugando || document.querySelector('.modal:not(.oculto)')) return; // No corre en pausa ni ventanas
- if (S.com <= 0 && !S.yatiri) S.vida -= 2; // Sin comida baja la vida de 2 en 2
- if (S.vida <= 0) { alert('💀 Game over. El juego se reinicia.'); localStorage.removeItem('yatiri'); location.reload(); } // Fin del juego
+$('pSalir').onclick = () => { guardar(); cerrar('pausa'); jugando = false; ['hud', 'pj', 'alerta', 'zoom'].forEach(cerrar); abrir('inicio'); finAnim = false; S = null; resize(); }; // Salir al inicio
+setInterval(() => { // Cada segundo (también con la pausa o ventanas abiertas)
+ if (!jugando || !S) return; // Solo jugando
+ if (S.com <= 0 && !S.yatiri) { if (!S.ham) { S.vida = Math.ceil(S.vida / 2); S.ham = 1; } else S.vida -= 1; } else if (S.com > 0) S.ham = 0; // Sin comida: vida a la mitad y luego -1 por segundo
+ if (S.vida <= 0) fin(); // Fin del juego
  hud(); // Refresca barras
 }, 1000);
 // ---------- PREGUNTAS ----------
@@ -388,9 +390,7 @@ function banco(p) { // Preguntas posibles de un país (k = tema, para no repetir
  const mc = (k, t, ok, fal) => ({ k, t, ok, o: mez([ok, ...mez([...new Set(fal)].filter(x => x != ok)).slice(0, 2)]) }); // Opción múltiple
  const vf = (k, t, v) => ({ k, t: 'Verdadero o falso: ' + t, ok: v ? 'Verdadero' : 'Falso', o: ['Verdadero', 'Falso'] }); // Verdadero/falso
  const B = []; // Lista de preguntas
- B.push(mc('cap', `¿Cuál es la capital de ${p[1]}?`, cap, ot.map(ca))); // Capital (múltiple)
- const f1 = Math.random() < .5; B.push(vf('cap', `La capital de ${p[1]} es ${f1 ? cap : ca(rnd(ot))}.`, f1)); // Capital (V/F)
- B.push(mc('cap', `¿De qué país es capital ${cap}?`, p[1], ot.map(x => x[1]))); // Capital inversa
+ B.push(mc('cap', `La capital de ${p[1]} es:`, cap, ot.map(ca))); // Capital (múltiple)
  if (cont) { // Preguntas de continente
   B.push(mc('cont', `¿En qué continente está ${p[1]}?`, cont, cs)); // Continente (múltiple)
   const f2 = Math.random() < .5; B.push(vf('cont', `${p[1]} está en ${f2 ? cont : rnd(cs.filter(c => c != cont))}.`, f2)); // Continente (V/F)
@@ -415,10 +415,10 @@ function pregunta() { // Muestra la pregunta actual
  $('qN').textContent = `Pregunta ${i + 1}/5`; $('qMsg').textContent = ''; $('qIn').value = ''; // Textos
  $('sil').classList.toggle('oculto', i != 0); $('qIn').classList.toggle('oculto', i != 0); $('qBtn').classList.toggle('oculto', i != 0); // Solo la 1 es escrita
  $('qOps').innerHTML = ''; // Limpia opciones
- $('qT').textContent = i == 0 ? '¿Qué país es esta silueta?' : i == 1 ? '¿Cuál es su bandera?' : q.t; // Enunciado
- $('qHint').textContent = H[S.arma].includes(i) ? `💡 Pista: empieza con "${(i < 2 ? p[1] : q.ok)[0]}"` : ''; // Pista
+ $('qT').textContent = i == 0 ? '¿Qué país es esta silueta?' : i == 1 ? (SK[S.arma] > 0 ? `¿Cuál es la bandera de ${p[1]}?` : '¿Cuál es su bandera?') : q.t; // Enunciado
+ $('qHint').textContent = H[S.arma].includes(i) ? i == 1 ? '💡 Pista: se eliminó una bandera' : `💡 Pista: empieza con "${(i < 2 ? p[1] : q.ok)[0]}"` : ''; // Pista
  if (i == 0) dibujar(p); // Silueta
- else if (i == 1) ops([p[2], ...mez(otros).slice(0, 2).map(x => x[2])], p[2], f => `<img src="https://flagcdn.com/w160/${f}.png">`); // Banderas (sin cambios)
+ else if (i == 1) ops([p[2], ...mez(otros).slice(0, H[S.arma].includes(1) ? 1 : 2).map(x => x[2])], p[2], f => `<img src="https://flagcdn.com/w160/${f}.png">`); // Banderas (sin cambios)
  else ops(q.o, q.ok); // Opción múltiple o V/F
 }
 function resp(ok) { // Evalúa una respuesta
@@ -432,12 +432,12 @@ $('qCerrar').onclick = () => cerrar('quiz'); // Abandonar país
 function terminar() { // País completado
  const p = Q.p, primero = Q.fallos == 0 && S.arma < 5; // ¿Sin ningún fallo?
  S.ok[p[0]] = 1; S.ult = p[0]; if (String(p[4]).startsWith('hsl')) colorBandera(p); // Marca explorado
- let o = Q.ac * 3, l = Q.ac * 18; // 3 oro y 18 legumbres por acierto
- if (Q.fallos == 0) { o += 5; l += 10; } // AK-47 o bonificación por todo correcto
+ let o = Q.ac * 3, l = Q.ac * 15; // 3 oro y 18 legumbres por acierto
+ if (Q.fallos == 0) { o += 5; l += 25; } // AK-47 o bonificación por todo correcto
  let t = mm('oro', o) + mm('leg', l); // Texto de recompensa
- if (primero) { S.primeros++; if (S.primeros % 5 == 0) { S.coca++; t += mm('coca', 1); } } // Coca cada 5 países perfectos
+ if (primero) { S.primeros++; S.racha = (S.racha || 0) + 1; if (S.racha % 10 == 0) { S.coca++; t += mm('coca', 1); } } else S.racha = 0; // Coca cada 10 países perfectos
  S.oro += o; S.leg += l; // Suma las monedas
- cerrar('quiz'); aviso(`🎉 ${p[1]} explorado ${t}`); hud(); pintar(); guardar(); revisarContinente(p); // Cierra y guarda
+ cerrar('quiz'); aviso(`🎉 ${p[1]} explorado ${t}`); hud(); pintar(); guardar(); revisarContinente(p); if (!S.fin && P.every(x => S.ok[x[0]])) final(); // Cierra, guarda y revisa el final del juego
 }
 // ---------- TIENDA ----------
 $('bTienda').onclick = () => { tienda(); abrir('tienda'); }; $('tCerrar').onclick = () => cerrar('tienda'); // Abrir y cerrar tienda
@@ -509,8 +509,8 @@ $('cOk').onclick = () => { cerrar('consejos'); abrir('pausa'); }; // Vuelve al m
 $('mon').onclick = e => { const s = e.target.closest('.mn'); if (s) nota(s.title); }; // En móvil, tocar una moneda muestra su nombre
 
 // ---------- EVENTOS SORPRESA ----------
-const EV = { 'South America': '🏹 ¡Una tribu hostil te embosca en la selva!', 'Africa': '🪘 ¡Una tribu hostil te rodea en la sabana!', 'Asia': '🗡️ ¡Bandidos asaltan tu caravana!', 'North America': '🤠 ¡Bandoleros te asaltan en el camino!', 'Europe': '⚔️ ¡Saqueadores atacan tu campamento!' }; // Ataque según la región
-let evT = 300 + Math.random() * 180; // Segundos hasta el próximo evento
+const EV = { 'South America': '🏹 ¡Una tribu hostil te embosca en la selva!', 'Africa': '🪘 ¡Una tribu hostil te rodea en la sabana!', 'Asia': '🗡️ ¡Bandidos asaltan tu caravana!', 'North America': '🤠 ¡Bandoleros te asaltan en el camino!', 'Europe': '⚔️ ¡Saqueadores atacan tu campamento!', 'Central America': '🐍 ¡Una tribu hostil te embosca en la jungla!' }; // Ataque según la región
+let evT = 240 + Math.random() * 120; // Segundos hasta el próximo evento
 function evento() { // Lanza un ataque sorpresa con una pregunta
  const g = S.pos && geo.find(x => x.polys.some(po => dentro(S.pos, po[0]))), p = g && P.find(x => x[0] == g.id), reg = p && EV[p[8]]; // País y región actuales
  const enQuiz = !$('quiz').classList.contains('oculto'); // ¿Ocurre mientras exploras un país?
@@ -530,7 +530,7 @@ setInterval(() => { // Cada segundo
  if (!jugando) return; // Solo jugando
  if ([...document.querySelectorAll('.modal:not(.oculto)')].some(m => m.id != 'quiz')) return; // No interrumpe tienda, pausa ni otras ventanas
  if (--evT > 0) return; // Aún no toca
- evT = 300 + Math.random() * 180; evento(); // Programa el siguiente y lanza este
+ evT = 240 + Math.random() * 120; evento(); // Programa el siguiente y lanza este
 }, 1000);
 $('pAyuda').onclick = () => { cerrar('pausa'); abrir('ayuda'); }; // Ver instrucciones desde la pausa
 
@@ -541,19 +541,88 @@ const PET = { // Una mascota en peligro de extinción por continente
  'Europe': { e: '🦭', n: 'Foca monje del Mediterráneo', d: 'Es una de las focas más raras del planeta: quedan unos pocos cientos de ejemplares. La pesca, la contaminación y la pérdida de playas tranquilas la ponen en peligro.' },
  'Africa': { e: '🦏', n: 'Rinoceronte negro', d: 'La caza furtiva por su cuerno redujo su población más de un 90% en el siglo XX. Hoy se recupera lentamente gracias a la protección, pero sigue en peligro crítico.' },
  'Asia': { e: '🐅', n: 'Tigre de Bengala', d: 'Es el felino emblemático del sur de Asia, sobre todo de la India. La caza y la destrucción de los bosques lo pusieron en peligro; las reservas protegidas ayudan a recuperarlo.' },
+ 'Central America': { e: '🐢', n: 'Tortuga carey', d: 'Es una tortuga marina de los arrecifes del Caribe, reconocible por su pico de loro y su caparazón de placas. Fue cazada por su caparazón y pierde sus playas de anidación; está en peligro crítico.' },
  'Oceania': { e: '🐨', n: 'Koala', d: 'Es un marsupial australiano que se alimenta casi solo de hojas de eucalipto. Los incendios, la deforestación y las enfermedades lo amenazan; en varias regiones de Australia está en peligro.' }
 };
+const PSVG = { // Mascotas dibujadas en 2D (mismo estilo plano que el explorador)
+ 'South America': `<ellipse cx="30" cy="28" rx="14" ry="12" fill="#222"/><path d="M18 24Q4 30 9 45L25 38Z" fill="#111"/><ellipse cx="42" cy="21" rx="9" ry="4" fill="#fff"/><rect x="40" y="10" width="6" height="12" fill="#b5513c"/><circle cx="44" cy="9" r="5" fill="#c9604a"/><path d="M48 7L57 11L49 13Z" fill="#e8d9a0"/><circle cx="45" cy="8" r="1.200" fill="#000"/><path d="M26 38V47M34 38V47" stroke="#555" stroke-width="3"/>`, // Cóndor andino
+ 'North America': `<path d="M14 24Q3 24 3 36Q10 31 16 31Z" fill="#8a8f98"/><ellipse cx="30" cy="26" rx="16" ry="9" fill="#8a8f98"/><rect x="17" y="30" width="4" height="15" fill="#6d727b"/><rect x="23" y="30" width="4" height="15" fill="#6d727b"/><rect x="35" y="30" width="4" height="15" fill="#6d727b"/><rect x="41" y="30" width="4" height="15" fill="#6d727b"/><ellipse cx="50" cy="19" rx="8" ry="6" fill="#9aa0a9"/><path d="M55 18L63 23L55 25Z" fill="#6d727b"/><path d="M45 15L47 7L51 13Z" fill="#6d727b"/><circle cx="52" cy="17" r="1.200" fill="#000"/><circle cx="62" cy="23" r="1.200" fill="#000"/>`, // Lobo gris mexicano
+ 'Europe': `<path d="M8 28L0 21L2 35Z" fill="#574f47"/><ellipse cx="30" cy="30" rx="25" ry="11" fill="#6b6259"/><ellipse cx="32" cy="35" rx="17" ry="5" fill="#d9cdb8"/><circle cx="52" cy="23" r="8" fill="#6b6259"/><ellipse cx="58" cy="26" rx="4" ry="3" fill="#d9cdb8"/><circle cx="60" cy="25" r="1.500" fill="#000"/><circle cx="53" cy="21" r="1.300" fill="#000"/><path d="M40 37L48 46L41 45Z" fill="#574f47"/>`, // Foca monje
+ 'Africa': `<rect x="10" y="14" width="38" height="20" rx="9" fill="#7a7d84"/><rect x="14" y="32" width="7" height="14" fill="#6a6d74"/><rect x="24" y="32" width="7" height="14" fill="#6a6d74"/><rect x="36" y="32" width="7" height="14" fill="#6a6d74"/><path d="M44 16L60 22L58 35L44 32Z" fill="#8a8d94"/><path d="M56 22L58 10L62 23Z" fill="#e6e0d0"/><path d="M50 18L51 12L55 19Z" fill="#e6e0d0"/><path d="M43 15L45 8L49 15Z" fill="#6a6d74"/><circle cx="52" cy="25" r="1.300" fill="#000"/>`, // Rinoceronte negro
+ 'Asia': `<path d="M12 24Q0 20 3 9" stroke="#e8872a" stroke-width="4" fill="none"/><ellipse cx="28" cy="26" rx="18" ry="10" fill="#e8872a"/><path d="M18 17L20 27M26 16L27 28M34 16L34 28M41 19L40 29" stroke="#222" stroke-width="2.500"/><rect x="14" y="32" width="5" height="14" fill="#e8872a"/><rect x="22" y="32" width="5" height="14" fill="#e8872a"/><rect x="36" y="32" width="5" height="14" fill="#e8872a"/><rect x="43" y="32" width="5" height="14" fill="#e8872a"/><circle cx="46" cy="13" r="3" fill="#e8872a"/><circle cx="56" cy="13" r="3" fill="#e8872a"/><circle cx="51" cy="20" r="8" fill="#e8872a"/><ellipse cx="53" cy="23" rx="4" ry="3" fill="#fff"/><path d="M47 15L49 18M54 15L52 18" stroke="#222" stroke-width="2"/><circle cx="49" cy="20" r="1.200" fill="#000"/><circle cx="54" cy="21" r="1.500" fill="#222"/>`, // Tigre de Bengala
+ 'Oceania': `<ellipse cx="32" cy="33" rx="14" ry="13" fill="#9a9aa0"/><ellipse cx="32" cy="36" rx="8" ry="8" fill="#d8d8dc"/><ellipse cx="20" cy="44" rx="5" ry="3" fill="#8a8a90"/><ellipse cx="44" cy="44" rx="5" ry="3" fill="#8a8a90"/><circle cx="21" cy="9" r="6" fill="#9a9aa0"/><circle cx="43" cy="9" r="6" fill="#9a9aa0"/><circle cx="21" cy="9" r="3" fill="#e8c6cf"/><circle cx="43" cy="9" r="3" fill="#e8c6cf"/><circle cx="32" cy="16" r="10" fill="#9a9aa0"/><ellipse cx="32" cy="18" rx="4" ry="5" fill="#222"/><circle cx="26" cy="13" r="1.500" fill="#000"/><circle cx="38" cy="13" r="1.500" fill="#000"/>`, // Koala
+ 'Central America': `<path d="M10 28L3 30L10 33Z" fill="#6f8f5a"/><path d="M24 36L12 47L29 42Z" fill="#6f8f5a"/><path d="M38 36L50 47L34 42Z" fill="#6f8f5a"/><ellipse cx="30" cy="26" rx="20" ry="13" fill="#b9772e"/><path d="M20 20L30 16L40 20L40 30L30 34L20 30Z" fill="none" stroke="#6b3f12" stroke-width="2"/><path d="M30 16V34M20 25H40" stroke="#6b3f12" stroke-width="1.500"/><path d="M44 28L57 39L45 37Z" fill="#6f8f5a"/><circle cx="54" cy="21" r="6" fill="#6f8f5a"/><path d="M58 21L64 24L58 26Z" fill="#c9a24a"/><circle cx="54" cy="19" r="1.300" fill="#000"/>` // Tortuga carey
+};
+const petSvg = c => `<svg class="pet" viewBox="0 0 64 48">${PSVG[c]}</svg>`; // Dibujo 2D de la mascota de un continente
 let mP = false; // ¿Se abrió el apartado de mascotas desde la pausa?
 function revisarContinente(p) { // ¿Se completó todo el continente?
  const c = p[8]; if (!c || !PET[c] || S.cont[c]) return; // Sin continente, sin mascota o ya completado
  if (!P.filter(x => x[8] == c).every(x => S.ok[x[0]])) return; // Faltan países
- S.cont[c] = 1; S.oro += 150; S.leg += 1000; S.coca += 2; S.pets.push(c); hud(); guardar(); // Recompensa y mascota
- aviso(`🌍 ¡${RG[c]} completado! ${mm('oro', 150)}${mm('leg', 1000)}${mm('coca', 2)}`); // Aviso de recompensa
+ S.cont[c] = 1; S.oro += 150; S.leg += 750; S.coca += 2; if (!S.pets.includes(c)) S.pets.push(c); hud(); guardar(); // Recompensa y mascota
+ aviso(`🌍 ¡${RG[c]} completado! ${mm('oro', 150)}${mm('leg', 750)}${mm('coca', 2)}`); // Aviso de recompensa
  verMascotas(c); // Muestra la nueva mascota con su descripción
 }
 function verMascotas(nuevo) { // Muestra las mascotas y sus descripciones
- $('mLista').innerHTML = (nuevo ? `<div class="item"><b>🎉 ¡Nueva mascota: ${PET[nuevo].e} ${PET[nuevo].n}!</b></div>` : '') + Object.keys(PET).map(c => S.pets.includes(c) ? `<div class="item"><span style="font-size:36px">${PET[c].e}</span><b>${PET[c].n}<small>${PET[c].d}</small></b></div>` : `<div class="item"><span style="font-size:36px">🔒</span><b>Mascota de ${RG[c]}<small>Explora todos los países del continente para desbloquearla.</small></b></div>`).join(''); // Lista
+ $('mLista').innerHTML = (nuevo ? `<div class="item"><b>🎉 ¡Nueva mascota: ${PET[nuevo].n}!</b>${petSvg(nuevo)}<b></b></div>` : '') + Object.keys(PET).map(c => S.pets.includes(c) ? `<div class="item">${petSvg(c)}<b>${PET[c].n}<small>${PET[c].d}</small></b></div>` : `<div class="item"><span style="font-size:36px">🔒</span><b>Mascota de ${RG[c]}<small>Explora todos los países del continente para desbloquearla.</small></b></div>`).join(''); // Lista
  abrir('mascotas'); // Abre la ventana
 }
 $('pMasc').onclick = () => { cerrar('pausa'); mP = true; verMascotas(); }; // Botón de la pausa
 $('mCerrar').onclick = () => { cerrar('mascotas'); if (mP) abrir('pausa'); mP = false; }; // Cierra y vuelve a la pausa si venía de ella
+
+// ---------- SIGUIENTE PAÍS ----------
+function centro(g) { let m = g.polys[0]; g.polys.forEach(po => { if (po[0].length > m[0].length) m = po; }); let a = [999, 999, -999, -999]; m[0].forEach(q => { a = [Math.min(a[0], q[0]), Math.min(a[1], q[1]), Math.max(a[2], q[0]), Math.max(a[3], q[1])]; }); return [(a[0] + a[2]) / 2, (a[1] + a[3]) / 2]; } // Centro del polígono más grande del país
+$('bSig').onclick = () => { // Viaja directo al siguiente país disponible
+ if (!jugando || document.querySelector('.modal:not(.oculto)')) return; // No con ventanas abiertas
+ const ids = opciones(); if (!ids.length) return aviso('🌍 ¡Ya exploraste todo el mundo!'); // Países permitidos ahora
+ const id = rnd(ids), g = geo.find(x => x.id == id), p = P.find(x => x[0] == id); // Elige uno
+ S.pos = centro(g); if (vz > 1) enfocar(S.pos); pintar(); iniciarPais(p); // Viaja y empieza el desafío
+};
+// ---------- FINAL DEL JUEGO: EL AURA DEL MUNDO ----------
+function final() { // Se exploraron todos los países
+ S.fin = 1; finAnim = true; guardar(); // El mapa empieza a brillar con colores AURA
+ $('fTxt').innerHTML = `Recorriste los ${P.length} países del mundo.<br>🪙 ${S.oro} · 🫘 ${S.leg} · 🌿 ${S.coca}<br>⭐ Países perfectos: ${S.primeros} · 🐾 Mascotas: ${S.pets.length}/7<br><br>Las hojas de coca te coronan y el mapa entero brilla con el AURA. Ya no eres un explorador: eres el <b>Yatiri del Mundo</b>.`; // Resumen y mensaje final
+ abrir('final'); // Muestra la pantalla final
+}
+$('fSeguir').onclick = () => cerrar('final'); // Seguir contemplando el mapa brillante
+$('fNueva').onclick = () => { localStorage.removeItem('yatiri'); location.reload(); }; // Empezar una aventura nueva
+setInterval(() => { if (finAnim && jugando) pintar(); }, 150); // Anima los colores del mapa final
+
+// ---------- ZOOM, PAÍSES EXPLORADOS Y PANTALLA COMPLETA ----------
+function vis(po) { // ¿El polígono está dentro de la vista? (acelera el zoom)
+ if (!po.b) { let a = [999, 999, -999, -999]; po[0].forEach(q => { a = [Math.min(a[0], q[0]), Math.min(a[1], q[1]), Math.max(a[2], q[0]), Math.max(a[3], q[1])]; }); po.b = a; } // Caja del polígono (una sola vez)
+ const [x1, y1] = px(po.b[0], po.b[3]), [x2, y2] = px(po.b[2], po.b[1]); return x2 > -10 && x1 < cv.width + 10 && y2 > -10 && y1 < cv.height + 10; // Cruza la pantalla
+}
+const lim = () => { vz = Math.min(60, Math.max(1, vz)); vu = Math.min(1 - .5 / vz, Math.max(.5 / vz, vu)); vv = Math.min(1 - .5 / vz, Math.max(.5 / vz, vv)); }; // Mantiene el mapa dentro de la pantalla
+const cxy = e => [e.clientX * cv.width / innerWidth, (e.clientY - cv.getBoundingClientRect().top) * cv.height / cv.clientHeight]; // Pantalla a lienzo
+function zoomEn(f, x, y) { const a = inv(x, y); vz *= f; lim(); const b = inv(x, y); vu += (a[0] - b[0]) / 360; vv += (b[1] - a[1]) / 141; lim(); pintar(); } // Zoom hacia un punto (el mapa se redibuja en vectores: no pierde calidad)
+function enfocar(pos) { vu = (pos[0] + 180) / 360; vv = (83 - pos[1]) / 141; lim(); } // Centra la vista en un punto
+const ptrs = new Map(); let d0 = 0, z0 = 1; // Dedos o cursor activos
+cv.addEventListener('pointerdown', e => { ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY }); cv.setPointerCapture(e.pointerId); if (ptrs.size == 2) { const [a, b] = [...ptrs.values()]; d0 = Math.hypot(a.x - b.x, a.y - b.y); z0 = vz; } }); // Empieza a tocar
+cv.addEventListener('pointermove', e => { // Arrastrar o pellizcar
+ const p = ptrs.get(e.pointerId); if (!p) return; // Ignora si no hay toque
+ if (ptrs.size == 2) { p.x = e.clientX; p.y = e.clientY; const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y); ptrs.forEach(q => q.moved = 1); if (d0) { const r = cxy({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 }); zoomEn(Math.min(60, Math.max(1, z0 * d / d0)) / vz, r[0], r[1]); } return; } // Pellizco = zoom
+ if (Math.hypot(e.clientX - p.x0, e.clientY - p.y0) > 8) p.moved = 1; // Pasó de toque a arrastre
+ if (p.moved) { vu -= (e.clientX - p.x) / (innerWidth * vz); vv -= (e.clientY - p.y) / (cv.clientHeight * vz); lim(); pintar(); } // Mueve el mapa
+ p.x = e.clientX; p.y = e.clientY; // Recuerda la posición
+});
+cv.addEventListener('pointerup', e => { const p = ptrs.get(e.pointerId); ptrs.delete(e.pointerId); if (ptrs.size < 2) d0 = 0; if (p && !p.moved && ptrs.size == 0) tocar(e); }); // Un toque sin arrastrar elige el país
+cv.addEventListener('pointercancel', e => ptrs.delete(e.pointerId)); // Cancela el toque
+cv.addEventListener('wheel', e => { e.preventDefault(); const r = cxy(e); zoomEn(e.deltaY < 0 ? 1.25 : .8, r[0], r[1]); }, { passive: false }); // Rueda del ratón
+$('zMas').onclick = () => zoomEn(1.5, cv.width / 2, cv.height / 2); $('zMenos').onclick = () => zoomEn(1 / 1.5, cv.width / 2, cv.height / 2); // Botones + y -
+$('zRes').onclick = () => { vz = 1; vu = .5; vv = .5; pintar(); }; // Vista completa
+let pP = false; // ¿Se abrió "Países explorados" desde la pausa?
+function verPaises() { // Muestra por continente los países explorados y los que faltan
+ $('pLista').innerHTML = Object.keys(RG).map(c => { const l = P.filter(x => x[8] == c), ok = l.filter(x => S.ok[x[0]]).map(x => x[1]), no = l.filter(x => !S.ok[x[0]]).map(x => x[1]); return `<h3>${RG[c]} (${ok.length}/${l.length})</h3><p>✅ ${ok.join(', ') || '—'}</p><p>⬜ ${no.join(', ') || '¡Completo!'}</p>`; }).join(''); // Lista por continente
+ abrir('paises'); // Abre la ventana
+}
+$('bPaises').onclick = () => { if (document.querySelector('.modal:not(.oculto)')) return; pP = false; verPaises(); }; // Desde el menú superior
+$('pPaises').onclick = () => { cerrar('pausa'); pP = true; verPaises(); }; // Desde la pausa
+$('pCerr').onclick = () => { cerrar('paises'); if (pP) abrir('pausa'); pP = false; }; // Cierra y vuelve a la pausa si venía de ella
+const esFull = () => document.fullscreenElement || document.webkitFullscreenElement; // ¿Pantalla completa?
+function pantalla() { // Entra en pantalla completa y bloquea en horizontal
+ const d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen; if (!f || esFull()) return; // Sin soporte o ya está
+ const r = f.call(d); if (r && r.then) r.then(() => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); }).catch(() => {}); // Bloquea horizontal
+}
+['bNueva', 'bCont'].forEach(i => $(i).addEventListener('click', pantalla)); // Al empezar, pantalla completa
+$('bFull').onclick = () => { if (esFull()) (document.exitFullscreen || document.webkitExitFullscreen).call(document); else pantalla(); }; // Botón ⛶
+setInterval(() => { if (!jugando || !S || $('evento').classList.contains('oculto') || !$('eCont').classList.contains('oculto')) return; S.vida = Math.max(0, S.vida - 3); S.com = Math.max(0, S.com - 3); hud(); if (S.vida <= 0) fin(); }, 1000); // Mientras respondes un ataque: -3 vida y -3 comida por segundo

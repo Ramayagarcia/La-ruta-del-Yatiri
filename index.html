@@ -2,7 +2,11 @@
 <html lang="es"> <!-- Idioma español -->
 <head> <!-- Configuración de la página -->
 <meta charset="UTF-8"> <!-- Permite tildes y ñ -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adapta a cualquier pantalla -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes"> <!-- Pantalla completa al añadir a inicio (Android) -->
+<meta name="apple-mobile-web-app-capable" content="yes"> <!-- Pantalla completa al añadir a inicio (iPhone) -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Barra de estado transparente -->
+<meta name="theme-color" content="#0a4bb5"> <!-- Color de la barra del navegador --> <!-- Adapta a cualquier pantalla -->
 <title>Ruta del Yatiri</title> <!-- Título de la pestaña -->
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet"> <!-- Fuente redondeada estilo N64 -->
 <link rel="stylesheet" href="style.css"> <!-- Conecta el CSS -->
@@ -15,7 +19,10 @@
 <span title="Vida">❤️<div class="barra"><i id="bVida"></i></div> <b id="nVida"></b></span> <!-- Barra y número de vida -->
 <span title="Comida">🍖<div class="barra"><i id="bCom"></i></div> <b id="nCom"></b></span> <!-- Barra y número de comida -->
 <span id="mon"></span> <!-- Oro, legumbres y hojas de coca -->
+<button id="bSig">➡️ Siguiente</button> <!-- Viaja al siguiente país disponible -->
 <button id="bTienda">🛒 Tienda</button> <!-- Abre la tienda -->
+<button id="bPaises" title="Países explorados">🗺️</button> <!-- Países explorados -->
+<button id="bFull" title="Pantalla completa">⛶</button> <!-- Pantalla completa -->
 <button id="bPausa">⏸️</button> <!-- Abre la pausa -->
 </div>
 <div id="pj" class="oculto"> <!-- Contenedor del personaje -->
@@ -62,6 +69,7 @@
 <button id="pCont">▶️ Continuar</button> <!-- Reanuda -->
 <button id="pGuardar">💾 Guardar partida</button> <!-- Guarda -->
 <button id="pAyuda">📖 Instrucciones</button> <!-- Relee las instrucciones -->
+<button id="pPaises">🗺️ Países explorados</button> <!-- Países explorados -->
 <button id="pMasc">🐾 Mascotas</button> <!-- Mascotas desbloqueadas -->
 <button id="pConsejos">💡 Consejos</button> <!-- Abre los consejos de monedas -->
 <button id="pSalir">🚪 Salir</button> <!-- Vuelve al inicio -->
@@ -84,33 +92,51 @@
 <div id="mLista" class="txt" style="width:100%"></div> <!-- Lista generada por JavaScript -->
 <button id="mCerrar">Cerrar</button> <!-- Cierra -->
 </section>
+<section id="final" class="modal oculto"> <!-- Final del juego -->
+<h2>🌈 ¡Cartógrafo del Mundo!</h2> <!-- Título -->
+<div id="fTxt" class="txt"></div> <!-- Resumen -->
+<button id="fSeguir">✨ Contemplar el mapa</button> <!-- Cierra -->
+<button id="fNueva">🔄 Nueva aventura</button> <!-- Reinicia -->
+</section>
+<div id="zoom" class="oculto"> <!-- Controles de zoom -->
+<button id="zMas">＋</button> <!-- Acercar -->
+<button id="zMenos">－</button> <!-- Alejar -->
+<button id="zRes">⌂</button> <!-- Vista completa -->
+</div>
+<section id="paises" class="modal oculto"> <!-- Países explorados -->
+<h2>🗺️ Países explorados</h2> <!-- Título -->
+<div id="pLista" class="txt" style="width:100%"></div> <!-- Lista por continente -->
+<button id="pCerr">Cerrar</button> <!-- Cierra -->
+</section>
 <div id="alerta" class="oculto"></div> <!-- Advertencia de vida o comida baja -->
 <section id="ayuda" class="modal oculto"> <!-- Instrucciones de la primera vez -->
 <h2>🌿 Cómo jugar</h2> <!-- Título -->
 <div class="txt"> <!-- Texto de ayuda -->
-1️⃣ Toca un país del mapa para viajar. El primero es libre; después elige un vecino (verde claro) y, si no tiene, cualquier país libre.<br> <!-- Paso 1 -->
-2️⃣ Cada país tiene 5 preguntas sobre ese país: escribe su nombre por la silueta, elige su bandera y responde 3 más de historia o geografía. Si fallas, repites hasta acertar.<br> <!-- Paso 2 -->
-3️⃣ Cada acierto al primer intento da 3 🪙 y 18 🫘. Si aciertas las 5 sin fallar, bonus de +5 🪙 y +10 🫘 (20 y 100 en total).<br> <!-- Paso 3 -->
-4️⃣ Acertar cuesta 3 de comida; fallar cuesta 3 de vida y 5 de comida. Sin comida pierdes vida; sin vida, ¡game over!<br> <!-- Paso 4 -->
-5️⃣ En la 🛒 Tienda compras armas (pistas y saltos de preguntas), canastas y botiquines. Algunas piden comprar antes la anterior.<br> <!-- Paso 5 -->
-6️⃣ ⚠️ <b>Ataques sorpresa:</b> piratas, tribus o bandidos pueden atacarte cada 5 a 8 minutos. Responde una pregunta de cultura general: si fallas pierdes 10 🪙 y 40 🫘. Si pasa mientras exploras un país, ese país se reinicia y pierdes la bonificación.<br> <!-- Paso 6 -->
-7️⃣ Cada 5 países perfectos ganas 1 🌿 hoja de coca. Guarda desde ⏸️ Pausa, donde también puedes releer estas instrucciones.<br> <!-- Paso 7 -->
-8️⃣ 🌍 Al explorar todos los países de un continente ganas 150 🪙, 1000 🫘, 2 🌿 y una mascota en peligro de extinción. Mira tus mascotas en 🐾 Pausa. <!-- Paso 8 -->
+1️⃣ Toca un país del mapa para viajar. Usa ➕ ➖, la rueda o el pellizco para hacer zoom y arrastra para moverte. El primero es libre; después solo vecinos (verde claro). Si hay vecinos libres aparece 🧭 Siguiente.<br> <!-- Paso 1 -->
+2️⃣ Cada país tiene 5 preguntas: silueta (escrita), bandera y 3 de historia o geografía de ese país. Si fallas, repites hasta acertar.<br> <!-- Paso 2 -->
+3️⃣ Cada acierto al primer intento da 3 🪙 y 18 🫘; si aciertas las 5, bonus de +5 🪙 y +10 🫘 (20 y 100 en total).<br> <!-- Paso 3 -->
+4️⃣ Acertar cuesta 3 de comida; fallar cuesta 3 de vida y 5 de comida. Sin comida tu vida baja a la mitad al instante y luego pierdes 1 por segundo, ¡incluso en pausa! Sin vida, game over.<br> <!-- Paso 4 -->
+5️⃣ En la 🛒 Tienda compras armas, canastas y botiquines. 1 🪙 equivale a 5 🫘. Algunas mejoras piden comprar antes la anterior.<br> <!-- Paso 5 -->
+6️⃣ ⚠️ Cada 4 a 6 minutos te atacan piratas, tribus o bandidos. Responde rápido: cada segundo pierdes 3 de vida y 3 de comida. Si fallas pierdes 10 🪙 y 40 🫘, y si pasa explorando un país, ese país se reinicia sin bonificación.<br> <!-- Paso 6 -->
+7️⃣ 🌿 La hoja de coca es rara: 1 por cada 10 países perfectos seguidos. El AK-47 cuesta 10.<br> <!-- Paso 7 -->
+8️⃣ 🌍 Al completar un continente (Centroamérica cuenta aparte) ganas 150 🪙, 1000 🫘, 2 🌿 y una mascota en peligro de extinción.<br> <!-- Paso 8 -->
+9️⃣ 🗺️ "Países explorados" muestra qué te falta por continente. ⛶ activa la pantalla completa. Explora todos los países para vivir el gran final. Guarda desde ⏸️ Pausa.<br> <!-- Paso 9 -->
 </div>
 <button id="aOk">¡Entendido!</button> <!-- Cierra las instrucciones -->
 </section>
 <section id="consejos" class="modal oculto"> <!-- Consejos para conseguir monedas -->
 <h2>💡 Consejos</h2> <!-- Título -->
 <div class="txt"> <!-- Texto de consejos -->
-🪙 <b>Oro:</b> +3 por pregunta acertada al primer intento; +5 extra si aciertas las 5.<br> <!-- Oro -->
-🫘 <b>Legumbres:</b> +18 por pregunta acertada; +10 extra por país perfecto.<br> <!-- Legumbres -->
-🌿 <b>Hoja de coca:</b> 1 por cada 5 países perfectos (sin fallos, sin ataques fallados y sin AK-47).<br> <!-- Coca -->
-⚔️ <b>Armas:</b> la lanza da pista en la 1ª pregunta, el cuchillo la salta, el machete y la espada saltan más y dan pistas. Las saltadas cuentan como acertadas. El AK-47 (5 hojas de coca) las salta todas.<br> <!-- Armas -->
-🏴‍☠️ <b>Ataques sorpresa:</b> responde bien para no perder 10 🪙 y 40 🫘. Si fallas mientras exploras, el país se reinicia sin bonificación. Ten monedas de reserva.<br> <!-- Eventos -->
-🍖 <b>Canastas:</b> para desbloquear la siguiente, compra 5 veces la anterior. Sin comida pierdes vida.<br> <!-- Comida -->
-❤️ <b>Salud:</b> el botiquín de hospital siempre está disponible; tras comprar 5 se desbloquea el Amarre del Yatiri (ch’ulu, poncho y sin pérdida de vida por hambre).<br> <!-- Salud -->
-🌍 <b>Continentes:</b> completa todos sus países para ganar 150 🪙, 1000 🫘, 2 🌿 y una mascota. Las descripciones quedan en 🐾 Mascotas.<br> <!-- Continentes -->
-⚠️ <b>Cuidado:</b> cada error cuesta 3 de vida y 5 de comida.<br> <!-- Aviso -->
+🪙 <b>Oro:</b> +3 por pregunta acertada al primer intento; +5 extra si aciertas las 5. 🫘 <b>Legumbres:</b> +18 por acierto y +10 extra por país perfecto. 1 🪙 vale como 5 🫘.<br> <!-- Monedas -->
+🌿 <b>Hoja de coca:</b> 1 por cada 10 países perfectos seguidos (un fallo reinicia la racha) y 2 por cada continente completo. El AK-47 cuesta 10.<br> <!-- Coca -->
+⚔️ <b>Armas:</b> la lanza da pista en la 1ª pregunta, el cuchillo la salta, el machete y la espada saltan más y dan pistas. Las saltadas cuentan como acertadas.<br> <!-- Armas -->
+🍖 <b>Hambre:</b> si la comida llega a 0 pierdes la mitad de la vida y luego 1 por segundo, incluso en pausa. Compra canastas antes de que se acabe.<br> <!-- Hambre -->
+🏴‍☠️ <b>Ataques sorpresa:</b> cada segundo que tardes en responder pierdes 3 de vida y 3 de comida; si fallas, 10 🪙 y 40 🫘.<br> <!-- Eventos -->
+🔍 <b>Zoom:</b> usa ➕ ➖, la rueda o el pellizco para ver países pequeños; arrastra para moverte y ⌂ para volver a la vista completa.<br> <!-- Zoom -->
+🧭 <b>Siguiente:</b> aparece cuando estás en un país con vecinos libres y te lleva directo a uno.<br> <!-- Siguiente -->
+🍖 <b>Canastas:</b> restauran 50/75/100% de comida y 25/50/75% de vida; para desbloquear la siguiente compra 5 veces la anterior. ❤️ El botiquín de hospital siempre está disponible y tras 5 se desbloquea el Amarre del Yatiri.<br> <!-- Comida y salud -->
+🌍 <b>Continentes:</b> completa todos sus países para ganar 150 🪙, 1000 🫘, 2 🌿 y una mascota. En 🗺️ ves qué países faltan.<br> <!-- Continentes -->
+📱 <b>Móvil:</b> en iPhone, usa Compartir → "Añadir a pantalla de inicio" para jugar a pantalla completa.<br> <!-- Móvil -->
 </div>
 <button id="cOk">Volver</button> <!-- Regresa a la pausa -->
 </section>
