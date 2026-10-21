@@ -128,3 +128,10 @@ html, body { overscroll-behavior: none; -webkit-tap-highlight-color: transparent
 @keyframes salto { 50% { transform: translateY(-4px); } } /* Saltito suave */
 #mLista .pet { width: 64px; flex: none; } /* Tamaño en la lista de mascotas */
 @media (max-width: 900px), (max-height: 500px) { #mascs .pet { width: 32px; } } /* Más pequeñas en móvil */
+/* ===== SONIDO ===== */
+#mascs .pet, #mLista .pet { cursor: pointer; pointer-events: auto; } /* Las mascotas se pueden tocar para oír su sonido */
+/* ===== FINAL (PANGEA), CRÉDITOS ===== */
+#pgModal { top: auto; bottom: 10px; transform: translate(-50%, 0); width: min(94vw, 460px); z-index: 11; } /* La pregunta de Pangea va abajo para ver el mapa */
+#creditos { z-index: 12; } /* Créditos por encima de todo */
+.cl { opacity: 0; text-align: center; font-size: 16px; line-height: 1.6; animation: apa 1s forwards; } /* Líneas de créditos que aparecen una a una */
+@keyframes apa { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } } /* Aparición suave */

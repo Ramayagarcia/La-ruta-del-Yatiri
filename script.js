@@ -56,7 +56,7 @@ UP.botiq.c[0].g = Math.round(UP.botiq.c[0].g * .5); UP.botiq.c[0].l = Math.round
 const H = [[],[0],[],[1,2],[2,3,4],[]]; // Preguntas con pista según nivel de arma
 const SK = [0,0,1,1,2,5]; // Preguntas que se saltan según nivel de arma
 const MON = { g: 'oro', l: 'leg', c: 'coca' }; // Traduce moneda a campo guardado
-let vz = 1, vu = .5, vv = .5, finAnim = false, S = null, geo = [], jugando = false, Q = null, V = {}; // Estado, países del mapa, si juega, pregunta actual
+let vz = 1, vu = .5, vv = .5, finAnim = false, enFinal = false, S = null, geo = [], jugando = false, Q = null, V = {}; // Estado, países del mapa, si juega, pregunta actual
 // ---------- MAPA ----------
 const px = (lo, la) => [((lo + 180) / 360 - vu) * vz * cv.width + cv.width / 2, ((83 - la) / 141 - vv) * vz * cv.height + cv.height / 2]; // Coordenadas geográficas a píxeles
 const inv = (x, y) => [((x - cv.width / 2) / (vz * cv.width) + vu) * 360 - 180, 83 - ((y - cv.height / 2) / (vz * cv.height) + vv) * 141]; // Píxeles a coordenadas geográficas
@@ -76,6 +76,7 @@ fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geo
  })
  .catch(() => $('carga').textContent = '⚠️ No se pudo cargar el mapa (revisa tu internet)'); // Error de red
 function pintar() { // Dibuja el mapa completo
+ if (enFinal) return; // Durante el final, la animación dibuja el mapa
  const op = S && jugando ? opciones() : []; // Países que se pueden elegir (se resaltan)
  cx.clearRect(0, 0, cv.width, cv.height); // Limpia el lienzo
  geo.forEach(g => { // Recorre cada país
@@ -110,6 +111,8 @@ function tocar(e) { // Al tocar o hacer clic en el mapa (sin arrastrar)
 // ---------- INTERFAZ ----------
 function aviso(t) { const d = document.createElement('div'); d.className = 'popup'; d.innerHTML = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2500); } // Mensaje animado
 function hud() { // Actualiza barras y monedas
+ const ahora = Date.now(); if (S.vida < (hud.v ?? S.vida) && ahora - (hud.t || 0) > 2500) { sfx('ay'); hud.t = ahora; } hud.v = S.vida; // Sonido al perder salud
+ if (S.com <= 0 && (hud.c ?? 1) > 0) sfx('hambre'); else if (S.com > 0 && S.com <= 25 && (hud.c ?? 99) > 25) sfx('pocaComida'); hud.c = S.com; // Sonido al acabarse la comida
  $('bSig').classList.remove('oculto'); // 🧭 Siguiente siempre visible
  ['sb', 'sc'].forEach(i => $(i).style.display = S.yatiri ? 'none' : ''); ['poncho', 'chulu'].forEach(i => $(i).style.display = S.yatiri ? '' : 'none'); // Con el Yatiri: ch’ulu y poncho en vez del sombrero
  const s2 = $('pj').firstElementChild.cloneNode(true); s2.setAttribute('width', 30); s2.setAttribute('height', 42); // Copia reducida del personaje
@@ -423,8 +426,8 @@ function pregunta() { // Muestra la pregunta actual
  else ops(q.o, q.ok); // Opción múltiple o V/F
 }
 function resp(ok) { // Evalúa una respuesta
- if (ok) { if (!Q.mal) Q.ac++; Q.mal = false; S.com = Math.max(0, S.com - 3); Q.q++; hud(); pregunta(); } // Acierto: -3 comida y avanza
- else { Q.mal = true; Q.fallos++; S.vida = Math.max(0, S.vida - 3); S.com = Math.max(0, S.com - 5); $('qMsg').textContent = '❌ Incorrecto (-3 vida, -5 comida). ¡Inténtalo otra vez!'; hud(); if (S.vida <= 0) fin(); } // Fallo: -3 vida, -5 comida
+ if (ok) { sfx('acierto'); if (!Q.mal) Q.ac++; Q.mal = false; S.com = Math.max(0, S.com - 3); Q.q++; hud(); pregunta(); } // Acierto: -3 comida y avanza
+ else { sfx('error'); Q.mal = true; Q.fallos++; S.vida = Math.max(0, S.vida - 3); S.com = Math.max(0, S.com - 5); $('qMsg').textContent = '❌ Incorrecto (-3 vida, -5 comida). ¡Inténtalo otra vez!'; hud(); if (S.vida <= 0) fin(); } // Fallo: -3 vida, -5 comida
 }
 function fin() { alert('💀 Game over. El juego se reinicia.'); localStorage.removeItem('yatiri'); location.reload(); } // Fin del juego
 $('qBtn').onclick = () => { const v = $('qIn').value; resp(Q.q == 0 ? norm(v) == norm(Q.p[1]) : Q.p[3].split('/').some(c => norm(c) == norm(v))); }; // Respuesta escrita
@@ -438,7 +441,7 @@ function terminar() { // País completado
  let t = mm('oro', o) + mm('leg', l); // Texto de recompensa
  if (primero) { S.primeros++; S.racha = (S.racha || 0) + 1; if (S.racha % 10 == 0) { S.coca++; t += mm('coca', 1); } } else S.racha = 0; // Coca cada 10 países perfectos
  S.oro += o; S.leg += l; // Suma las monedas
- cerrar('quiz'); aviso(`🎉 ${p[1]} explorado ${t}`); hud(); pintar(); guardar(); revisarContinente(p); if (!S.fin && P.every(x => S.ok[x[0]])) final(); // Cierra, guarda y revisa el final del juego
+ sfx('pais'); cerrar('quiz'); aviso(`🎉 ${p[1]} explorado ${t}`); hud(); pintar(); guardar(); revisarContinente(p); if (!S.fin && P.every(x => S.ok[x[0]])) final(); // Cierra, guarda y revisa el final del juego
 }
 // ---------- TIENDA ----------
 $('bTienda').onclick = () => { tienda(); abrir('tienda'); }; $('tCerrar').onclick = () => cerrar('tienda'); // Abrir y cerrar tienda
@@ -476,8 +479,8 @@ function pedir(k, i, m) { // Explica la mejora antes de comprar
 function comprar(k, i, m) { // Compra una mejora
  const u = UP[k], precio = u.c[i][m]; // Precio
  if (bloqueo(k, i)) return; // Condición no cumplida
- if (S[MON[m]] < precio) return aviso('❌ No te alcanza'); // Sin fondos
- S[MON[m]] -= precio; // Paga
+ if (S[MON[m]] < precio) { sfx('pobre'); return aviso('POBREE JAJA 🤣'); } // Sin fondos
+ S[MON[m]] -= precio; sfx(k == 'arma' ? 'arma' + i : k == 'botiq' ? 'botiq' + i : 'comida'); // Paga y suena la compra
  if (k == 'arma') S.arma = i + 1; // Sube el arma
  if (k == 'comida') { S.cn[i]++; S.comida = Math.max(S.comida, i + 1); const [c, v] = [[50, 25], [75, 50], [100, 75]][i]; S.com = Math.min(100, S.com + c); S.vida = Math.min(100, S.vida + v); } // Canasta
  if (k == 'botiq') { S.com = 100; S.vida = 100; if (i == 1) S.yatiri = 1; else S.bn++; } // Botiquín
@@ -513,13 +516,14 @@ $('mon').onclick = e => { const s = e.target.closest('.mn'); if (s) nota(s.title
 const EV = { 'South America': '🏹 ¡Una tribu hostil te embosca en la selva!', 'Africa': '🪘 ¡Una tribu hostil te rodea en la sabana!', 'Asia': '🗡️ ¡Bandidos asaltan tu caravana!', 'North America': '🤠 ¡Bandoleros te asaltan en el camino!', 'Europe': '⚔️ ¡Saqueadores atacan tu campamento!', 'Central America': '🐍 ¡Una tribu hostil te embosca en la jungla!' }; // Ataque según la región
 let evT = 240 + Math.random() * 120; // Segundos hasta el próximo evento
 function evento() { // Lanza un ataque sorpresa con una pregunta
+ sfx('suspenso'); // Música de suspenso
  const g = S.pos && geo.find(x => x.polys.some(po => dentro(S.pos, po[0]))), p = g && P.find(x => x[0] == g.id), reg = p && EV[p[8]]; // País y región actuales
  const enQuiz = !$('quiz').classList.contains('oculto'); // ¿Ocurre mientras exploras un país?
  $('eT').textContent = Math.random() < .5 || !reg ? '🏴‍☠️ ¡Piratas invadieron tu barco!' : reg; // Mensaje del ataque
  const x = rnd(POOL), q = x[0] == 'vf' ? { t: 'Verdadero o falso: ' + x[1], ok: x[2] ? 'Verdadero' : 'Falso', o: ['Verdadero', 'Falso'] } : { t: x[0], ok: x[1], o: mez([x[1], x[2], x[3]]) }; // Pregunta general
  $('eQ').textContent = q.t; $('eOps').innerHTML = ''; $('eMsg').textContent = ''; $('eCont').classList.add('oculto'); // Prepara la ventana
  q.o.forEach(o => { const b = document.createElement('button'); b.textContent = o; b.onclick = () => { // Una opción
-  const bien = o == q.ok; // ¿Acertó?
+  const bien = o == q.ok; sfx(bien ? 'acierto' : 'error'); // ¿Acertó?
   if (!bien) { S.oro = Math.max(0, S.oro - 10); S.leg = Math.max(0, S.leg - 40); } // Castigo: -10 oro y -40 legumbres
   $('eMsg').textContent = bien ? '✅ ¡Repeliste el ataque!' : '❌ Pierdes 10 de oro y 40 legumbres' + (enQuiz ? '. Tu exploración se reinicia y ya no tendrás bonificación.' : '.'); // Resultado
   [...$('eOps').children].forEach(c => c.disabled = true); $('eCont').classList.remove('oculto'); // Bloquea opciones
@@ -555,12 +559,12 @@ const PSVG = { // Mascotas dibujadas en 2D (mismo estilo plano que el explorador
  'Oceania': `<path d="M0 43L64 40" stroke="#6b4a2a" stroke-width="4.500"/><path d="M50 40C53 33 60 35 63 38C59 42 54 42 50 40Z" fill="#5d9a4d" ${OL}/><path d="M18 26C18 15 46 15 46 26L48 40C48 44 42 46 32 46C22 46 16 44 16 40Z" fill="#9b9ba1" ${OL}/><ellipse cx="32" cy="36" rx="9" ry="8" fill="#dcdce0"/><path d="M26 34L28 37M32 31L33 35M37 34L36 38" stroke="#b9b9be" stroke-width=".9"/><path d="M17 28C11 32 11 38 16 42C18 38 19 33 21 30Z" fill="#8a8a90" ${OL}/><path d="M47 28C53 32 53 38 48 42C46 38 45 33 43 30Z" fill="#8a8a90" ${OL}/><path d="M11 40L9 43M13.500 41.500L12.500 44.500M53 40L55 43M50.500 41.500L51.500 44.500" stroke="#2a2a2e" stroke-width="1.200"/><circle cx="20" cy="9" r="7" fill="#a3a3a9" ${OL}/><circle cx="44" cy="9" r="7" fill="#a3a3a9" ${OL}/><circle cx="20" cy="9" r="4" fill="#efd0d6"/><circle cx="44" cy="9" r="4" fill="#efd0d6"/><path d="M14 10C14 6 17 3 20 3M50 10C50 6 47 3 44 3" stroke="#ecece8" stroke-width="1.600" fill="none"/><circle cx="32" cy="16" r="11" fill="#a9a9af" ${OL}/><circle cx="27" cy="14" r="1.700" fill="#111"/><circle cx="37" cy="14" r="1.700" fill="#111"/><circle cx="27.500" cy="13.400" r=".6" fill="#fff"/><circle cx="37.500" cy="13.400" r=".6" fill="#fff"/><ellipse cx="32" cy="18.500" rx="4.500" ry="5.500" fill="#2a2a2e"/><ellipse cx="30.500" cy="16.500" rx="1.200" ry="1.700" fill="#666"/><path d="M28 24Q32 27 36 24" stroke="#444" stroke-width="1" fill="none"/>`, // Koala
  'Central America': `<path d="M16 22C8 19 2 23 1 30C6 31 12 29 18 28Z" fill="#7b9a5c" ${OL}/><path d="M48 22C56 19 62 23 63 30C58 31 52 29 46 28Z" fill="#7b9a5c" ${OL}/><path d="M18 36C13 39 13 44 18 47C21 44 22 40 23 37Z" fill="#7b9a5c" ${OL}/><path d="M46 36C51 39 51 44 46 47C43 44 42 40 41 37Z" fill="#7b9a5c" ${OL}/><path d="M30 40L32 46L34 40Z" fill="#7b9a5c" ${OL}/><path d="M26 11C26 3 38 3 38 11C38 14 35 15 32 15C29 15 26 14 26 11Z" fill="#7b9a5c" ${OL}/><path d="M29.500 6L32 -1L34.500 6Z" fill="#d9b24a" ${OL}/><circle cx="29" cy="9" r="1.300" fill="#111"/><circle cx="35" cy="9" r="1.300" fill="#111"/><path d="M10 28C8 17 20 9 32 9C44 9 54 17 52 28C50 36 40 41 31 41C22 41 12 36 10 28Z" fill="#b8742c" ${OL}/><path d="M32 13L40 17L40 25L32 29L24 25L24 17Z" fill="#d89c3c" stroke="#5a3410" stroke-width="1.200"/><path d="M24 17L16 21L14 29L22 33L24 25M40 17L48 21L50 29L42 33L40 25M32 29V37M22 33L26 39M42 33L38 39" stroke="#5a3410" stroke-width="1.200" fill="none"/><path d="M29 17L31 20M35 22L37 24M17 25L19 28M45 25L47 28M28 33L30 36" stroke="#6b3a10" stroke-width="1.800" stroke-linecap="round"/><path d="M27 15L31 14" stroke="#f3cf7a" stroke-width="1.200"/>` // Tortuga carey
 };
-const petSvg = c => `<svg class="pet" viewBox="0 0 64 48">${PSVG[c]}</svg>`; // Dibujo 2D de la mascota de un continente
+const petSvg = c => `<svg class="pet" data-c="${c}" viewBox="0 0 64 48">${PSVG[c]}</svg>`; // Dibujo 2D de la mascota de un continente
 let mP = false; // ¿Se abrió el apartado de mascotas desde la pausa?
 function revisarContinente(p) { // ¿Se completó todo el continente?
  const c = p[8]; if (!c || !PET[c] || S.cont[c]) return; // Sin continente, sin mascota o ya completado
  if (!P.filter(x => x[8] == c).every(x => S.ok[x[0]])) return; // Faltan países
- S.cont[c] = 1; S.oro += 150; S.leg += 750; S.coca += 2; if (!S.pets.includes(c)) S.pets.push(c); hud(); guardar(); // Recompensa y mascota
+ S.cont[c] = 1; setTimeout(() => sfx('continente'), 700); S.oro += 150; S.leg += 750; S.coca += 2; if (!S.pets.includes(c)) S.pets.push(c); hud(); guardar(); // Recompensa y mascota
  aviso(`🌍 ¡${RG[c]} completado! ${mm('oro', 150)}${mm('leg', 750)}${mm('coca', 2)}`); // Aviso de recompensa
  verMascotas(c); // Muestra la nueva mascota con su descripción
 }
@@ -582,10 +586,12 @@ $('bSig').onclick = () => { // Viaja directo al siguiente país disponible
  S.pos = centro(g); if (vz > 1) enfocar(S.pos); pintar(); iniciarPais(p); // Viaja y empieza el desafío
 };
 // ---------- FINAL DEL JUEGO: EL AURA DEL MUNDO ----------
-function final() { // Se exploraron todos los países
- S.fin = 1; finAnim = true; guardar(); // El mapa empieza a brillar con colores AURA
- $('fTxt').innerHTML = `Recorriste los ${P.length} países del mundo.<br>🪙 ${S.oro} · 🫘 ${S.leg} · 🌿 ${S.coca}<br>⭐ Países perfectos: ${S.primeros} · 🐾 Mascotas: ${S.pets.length}/7<br><br>Las hojas de coca te coronan y el mapa entero brilla con el AURA. Ya no eres un explorador: eres el <b>Yatiri del Mundo</b>.`; // Resumen y mensaje final
- abrir('final'); // Muestra la pantalla final
+function final() { // Se exploraron todos los países: comienza el gran final (Pangea)
+ S.fin = 1; guardar(); enFinal = true; finAnim = false; vz = 1; vu = .5; vv = .5; // Marca el final y reinicia la vista
+ ['hud', 'pj', 'zoom', 'alerta', 'pausa', 'tienda', 'quiz', 'evento'].forEach(cerrar); mus.pause(); if (mg) mg.gain.value = 0; // Quita la interfaz y la música de fondo
+ sfx('uniendo'); const t0 = performance.now(), D = 7000; // Retumbar de continentes que se mueven
+ const paso = ts => { const u = Math.min(1, (ts - t0) / D); dibujaPangea(u); if (u < 1) requestAnimationFrame(paso); else { snap = document.createElement('canvas'); snap.width = cv.width; snap.height = cv.height; snap.getContext('2d').drawImage(cv, 0, 0); abrir('pgModal'); } }; // Cada cuadro acerca los países
+ requestAnimationFrame(paso); // Empieza la animación
 }
 $('fSeguir').onclick = () => cerrar('final'); // Seguir contemplando el mapa brillante
 $('fNueva').onclick = () => { localStorage.removeItem('yatiri'); location.reload(); }; // Empezar una aventura nueva
@@ -630,3 +636,113 @@ function pantalla() { // Entra en pantalla completa y bloquea en horizontal
 ['bNueva', 'bCont'].forEach(i => $(i).addEventListener('click', pantalla)); // Al empezar, pantalla completa
 $('bFull').onclick = () => { if (esFull()) (document.exitFullscreen || document.webkitExitFullscreen).call(document); else pantalla(); }; // Botón ⛶
 setInterval(() => { if (!jugando || !S || $('evento').classList.contains('oculto') || !$('eCont').classList.contains('oculto')) return; S.vida = Math.max(0, S.vida - 3); S.com = Math.max(0, S.com - 3); hud(); if (S.vida <= 0) fin(); }, 1000); // Mientras respondes un ataque: -3 vida y -3 comida por segundo
+
+// =====================================================================
+//  SONIDOS: todo se genera con la Web Audio API (no hace falta ningún archivo)
+//  tono() = una nota (con oscilador), ruido() = ruido filtrado (golpes, soplidos).
+//  Cada efecto es una combinación de notas y ruidos con "caídas" de frecuencia: así suenan graciosos.
+// =====================================================================
+let AC = null, sg = null, mg = null, musOn = localStorage.getItem('yatiriMus') != '0', musArchivo = false; // Audio, volumen de efectos y de música, ¿música activa?
+function audio() { // Crea el audio la primera vez (el navegador exige un clic antes)
+ if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); sg = AC.createGain(); sg.gain.value = .5; sg.connect(AC.destination); mg = AC.createGain(); mg.gain.value = musOn ? .25 : 0; mg.connect(AC.destination); } // Volúmenes
+ if (AC.state == 'suspended') AC.resume(); return AC; // Despierta el audio si estaba dormido
+}
+const tono = (f, t0, d, tipo = 'square', v = .3, f2 = null, dest = null) => { // Una nota: frecuencia, inicio, duración, onda, volumen, frecuencia final
+ const a = AC, o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0; o.type = tipo; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d); // Desliza la nota
+ g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g); g.connect(dest || sg); o.start(t); o.stop(t + d + .02); // La nota se apaga sola
+};
+const ruido = (t0, d, v = .3, fc = 1000, dest = null) => { // Ruido filtrado (golpes, soplidos, explosiones)
+ const a = AC, n = Math.floor(a.sampleRate * d), b = a.createBuffer(1, n, a.sampleRate), x = b.getChannelData(0), s = a.createBufferSource(), fl = a.createBiquadFilter(), g = a.createGain(), t = a.currentTime + t0; // Material
+ for (let i = 0; i < n; i++) x[i] = Math.random() * 2 - 1; s.buffer = b; fl.type = 'lowpass'; fl.frequency.value = fc; g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); s.connect(fl); fl.connect(g); g.connect(dest || sg); s.start(t); // Ruido que se apaga
+};
+const voz = (t0, f1, f2, d, v = .3, tipo = 'sawtooth', vh = 0, vd = 0, fc = 1500, dest = null) => { // Voz de animal: onda + vibrato + filtro de formante
+ const a = AC, o = a.createOscillator(), g = a.createGain(), fl = a.createBiquadFilter(), t = a.currentTime + t0; o.type = tipo; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + d); // Desliza el tono
+ if (vh) { const l = a.createOscillator(), lg = a.createGain(); l.frequency.value = vh; lg.gain.value = vd; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + d + .05); } // Vibrato (tembleque de la voz)
+ fl.type = 'bandpass'; fl.frequency.value = fc; fl.Q.value = 2; g.gain.setValueAtTime(.001, t); g.gain.linearRampToValueAtTime(v, t + Math.min(.05, d / 4)); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(fl); fl.connect(g); g.connect(dest || sg); o.start(t); o.stop(t + d + .05); // Ataque suave y caída
+};
+const seq = (notas, d, tipo, v, paso) => notas.forEach((f, i) => tono(f, i * paso, d, tipo, v)); // Una melodía rápida de notas seguidas
+const SFX = { // Catálogo de sonidos
+ click: () => tono(700, 0, .05, 'square', .08, 1000), // Clic de botón
+ bienvenida: () => { seq([392, 523, 659, 784, 1047], .16, 'square', .22, .11); tono(300, .6, .4, 'sawtooth', .22, 1300); ruido(1, .15, .2, 5000); }, // Bienvenida: fanfarria + "uuuiii"
+ arma0: () => { tono(180, 0, .3, 'sine', .45, 650); tono(650, .3, .25, 'sine', .35, 250); }, // Lanza: boing de resorte
+ arma1: () => { ruido(0, .25, .25, 9000); tono(2200, 0, .25, 'triangle', .2, 4000); }, // Cuchillo: shing
+ arma2: () => { ruido(0, .4, .35, 2500); tono(300, 0, .35, 'sawtooth', .25, 80); }, // Machete: zuuum
+ arma3: () => { tono(1300, 0, .6, 'sine', .3); tono(1950, .04, .6, 'sine', .22); ruido(0, .08, .3, 8000); }, // Espada: tiiing
+ arma4: () => { for (let i = 0; i < 8; i++) { ruido(i * .07, .06, .4, 3000); tono(200 - i * 8, i * .07, .06, 'square', .2); } tono(900, .6, .3, 'sine', .3, 300); }, // AK-47: ra-ta-ta-ta + pew
+ comida: () => { [0, .15, .3].forEach(t => ruido(t, .08, .4, 1800)); tono(140, .5, .5, 'sawtooth', .3, 70); }, // Canasta: ñam ñam ñam + eructo
+ botiq0: () => { seq([523, 659, 784], .2, 'triangle', .3, .1); tono(1568, .4, .4, 'sine', .25, 2093); }, // Botiquín: ta-ta-tan brillante
+ botiq1: () => { seq([440, 523, 587, 659, 880], .3, 'sine', .3, .13); tono(220, 0, 1, 'triangle', .25); tono(1760, .7, .8, 'sine', .15, 880); }, // Yatiri: flauta mágica
+ pobre: () => { tono(311, 0, .35, 'sawtooth', .3, 294); tono(294, .38, .35, 'sawtooth', .3, 277); tono(277, .76, .35, 'sawtooth', .3, 262); tono(247, 1.14, .8, 'sawtooth', .3, 160); }, // Sin monedas: trombón triste
+ error: () => { tono(220, 0, .25, 'sawtooth', .3, 110); tono(160, .25, .35, 'square', .25, 60); }, // Respuesta incorrecta: bzzzz
+ acierto: () => { tono(784, 0, .1, 'square', .15); tono(1175, .09, .2, 'square', .15); }, // Respuesta correcta: ding
+ pais: () => { seq([523, 659, 784, 1047, 784, 1047], .18, 'square', .22, .1); tono(1319, .6, .5, 'triangle', .25); }, // País completado: fanfarria
+ continente: () => { seq([392, 523, 659, 784, 1047, 1319, 1568], .2, 'square', .22, .11); ruido(.8, .6, .3, 7000); tono(523, .9, 1, 'triangle', .3); tono(784, .9, 1, 'triangle', .25); }, // Continente completado: fanfarria grande
+ ay: () => { tono(800, 0, .12, 'square', .22, 400); tono(550, .13, .2, 'square', .22, 250); }, // Pierdes salud: ¡ay!
+ pocaComida: () => [0, .2, .4].forEach(t => tono(880, t, .1, 'square', .2)), // Se acaba la comida: bip bip bip
+ hambre: () => { tono(95, 0, .7, 'sawtooth', .4, 55); ruido(0, .7, .25, 300); tono(80, .8, .6, 'sawtooth', .4, 50); }, // Sin comida: rugido de tripas
+ suspenso: () => { tono(110, 0, 2.4, 'sawtooth', .22, 55); tono(116, 0, 2.4, 'sawtooth', .18, 58); tono(880, 1, 1.4, 'triangle', .1, 1500); tono(90, 2.3, .9, 'square', .35, 35); ruido(2.3, .8, .4, 600); }, // Ataque sorpresa: suspenso + ¡DUN!
+ 'South America': () => { voz(0, 1800, 3200, .35, .35, 'sawtooth', 40, 200, 2600); voz(.32, 3200, 1500, .45, .3, 'sawtooth', 30, 150, 2600); ruido(0, .8, .12, 6000); }, // Cóndor: chillido áspero
+ 'North America': () => { voz(0, 350, 720, .9, .4, 'sine', 5, 8, 900); voz(0, 700, 1440, .9, .14, 'sine', 5, 16, 1800); voz(.9, 720, 480, 1.1, .35, 'sine', 6, 10, 900); }, // Lobo: aullido largo
+ 'Europe': () => { voz(0, 330, 170, .2, .5, 'sawtooth', 0, 0, 700); ruido(0, .15, .3, 1200); voz(.3, 310, 160, .22, .5, 'sawtooth', 0, 0, 700); ruido(.3, .15, .3, 1200); voz(.65, 120, 80, .3, .3, 'sine'); }, // Foca: arf arf y ronroneo
+ 'Africa': () => { voz(0, 110, 70, .55, .5, 'sawtooth', 25, 15, 320); ruido(0, .5, .3, 500); ruido(.6, .3, .45, 1500); voz(.6, 95, 60, .3, .4, 'sawtooth', 0, 0, 300); }, // Rinoceronte: gruñido y resoplido
+ 'Asia': () => { voz(0, 160, 100, 1.2, .5, 'sawtooth', 30, 20, 500); voz(0, 320, 200, 1.2, .25, 'sawtooth', 33, 40, 900); ruido(0, 1.2, .35, 1300); }, // Tigre: rugido
+ 'Oceania': () => { voz(0, 200, 120, .6, .5, 'sawtooth', 40, 40, 420); voz(.7, 260, 130, .55, .5, 'sawtooth', 38, 40, 420); ruido(.1, .4, .15, 700); }, // Koala: bramido gracioso
+ 'Central America': () => { voz(0, 900, 1700, .12, .35, 'sine'); voz(.18, 950, 1800, .12, .35, 'sine'); voz(.4, 320, 80, .18, .45, 'sine'); ruido(.4, .1, .2, 800); }, // Tortuga: pip pip plop
+ uniendo: () => { tono(55, 0, 7, 'sawtooth', .25, 130); ruido(0, 7, .25, 250); tono(80, 3, 4, 'triangle', .2, 200); }, // Los continentes se mueven
+ meteoro: () => { tono(2200, 0, 1.5, 'sawtooth', .15, 180); ruido(1.5, 1.6, .7, 500); tono(70, 1.5, 1.6, 'sine', .8, 28); }, // Meteorito: silbido + explosión
+ supermeteoro: () => { tono(2600, 0, 2.2, 'sawtooth', .18, 150); ruido(2.2, 3.2, .9, 350); tono(55, 2.2, 3.2, 'sine', .9, 20); ruido(3.2, 2, .6, 600); tono(40, 3.2, 2, 'sine', .8, 18); } // Supermeteorito: explosión enorme
+};
+function sfx(n) { const f = ARCH[AR[n]]; if (f) { try { f.currentTime = 0; f.play().catch(() => { }); } catch (e) { } return; } if (!audio()) return; try { SFX[n](); } catch (e) { } } // Reproduce tu archivo si existe; si no, el sonido creado por código
+// ---------- MÚSICA DE FONDO ----------
+// Si pones tu propia canción en la misma carpeta con el nombre musica.mp3, se usará esa. Si no, suena una melodía original.
+let mus = new Audio(); mus.loop = true; // Marcador hasta que cargue un archivo
+['mp3', 'ogg', 'wav'].forEach(x => { const a = new Audio('musica.' + x); a.loop = true; a.volume = .6; a.addEventListener('canplaythrough', () => { if (musArchivo) return; musArchivo = true; mus = a; if (musOn && AC) mus.play().catch(() => { }); }); }); // Usa musica.mp3, musica.ogg o musica.wav (el primero que exista)
+const LEAD = [523, 0, 659, 784, 659, 0, 587, 523, 392, 0, 440, 523, 440, 0, 392, 330, 523, 0, 659, 784, 880, 784, 659, 0, 587, 659, 587, 523, 392, 0, 523, 0]; // Melodía alegre original
+const BAS = LEAD.map((_, i) => i % 4 == 0 ? [131, 131, 175, 196][(i >> 2) % 4] : 0); // Bajo
+let ms = 0, mt = null; // Paso actual y temporizador
+function musica() { // Arranca la melodía de fondo
+ if (mt) return; mt = setInterval(() => { if (!AC || !musOn || musArchivo) return; const n = LEAD[ms % 32], b = BAS[ms % 32]; if (n) tono(n, 0, .16, 'square', .35, null, mg); if (b) tono(b, 0, .2, 'triangle', .7, null, mg); if (ms % 2 == 0) ruido(0, .03, .2, 7000, mg); ms++; }, 190); // Una nota cada 190 ms
+}
+['bNueva', 'bCont'].forEach(i => $(i).addEventListener('click', () => { audio(); sfx('bienvenida'); musica(); if (musOn) mus.play().catch(() => { }); })); // Bienvenida y música al empezar
+$('bMus').onclick = () => { musOn = !musOn; localStorage.setItem('yatiriMus', musOn ? '1' : '0'); $('bMus').textContent = musOn ? '🔊' : '🔇'; if (mg) mg.gain.value = musOn ? .25 : 0; if (musOn) { if (musArchivo) mus.play().catch(() => { }); } else mus.pause(); }; // Silenciar / activar la música
+$('bMus').textContent = musOn ? '🔊' : '🔇'; // Icono inicial
+document.addEventListener('click', e => { const el = e.target.closest ? e.target.closest('button, .pet') : null; if (!el) return; if (el.classList.contains('pet') && el.dataset && el.dataset.c) sfx(el.dataset.c); else sfx('click'); }); // Clic en botones y sonido de cada animal
+
+// ---------- ARCHIVOS DE SONIDO OPCIONALES (pon el archivo en la carpeta del juego con este nombre y extensión .mp3, .ogg o .wav) ----------
+const ARCH = {}, AR = { pobre: 'pobre', bienvenida: 'bienvenida', suspenso: 'ataque', pocaComida: 'pocacomida', hambre: 'sincomida', error: 'error', 'South America': 'condor', 'North America': 'lobo', 'Europe': 'foca', 'Africa': 'rinoceronte', 'Asia': 'tigre', 'Oceania': 'koala', 'Central America': 'tortuga' }; // Sonido -> nombre de archivo (.mp3)
+Object.values(AR).forEach(n => ['mp3', 'ogg', 'wav'].forEach(x => { const a = new Audio(n + '.' + x); a.addEventListener('canplaythrough', () => { if (!ARCH[n]) ARCH[n] = a; }); })); // Prueba .mp3, .ogg y .wav: se usa el primero que exista // Si el archivo existe, se usa en lugar del sonido por código
+// ---------- PANGEA, METEORITO Y CRÉDITOS ----------
+let snap = null, crFin = false; // Foto del mapa unido y si los créditos son los del final
+const OFF = { 'Africa': [20, 0, 1, -5, 2], 'South America': [-60, -15, 1, 28, 12], 'North America': [-100, 45, .85, 60, -12], 'Central America': [-85, 14, 1, 45, 2], 'Europe': [15, 50, 1, 5, -10], 'Asia': [90, 40, .75, -30, -18], 'Oceania': [140, -25, .8, -65, -8] }; // Por continente: centro, escala y desplazamiento hacia Pangea
+function dibujaPangea(u) { // Dibuja el mapa con los continentes a medio camino de unirse
+ const W = cv.width, H = cv.height, e = u * u * (3 - 2 * u); cx.setTransform(1, 0, 0, 1, 0, 0); cx.fillStyle = '#0a3a6b'; cx.fillRect(0, 0, W, H); // Océano y suavizado del movimiento
+ geo.forEach(g => { const p = P.find(x => x[0] == g.id), o = OFF[p ? p[8] : g.cont] || [0, 0, 1, 0, 0], k = 1 + (o[2] - 1) * e, hh = (g.id.charCodeAt(0) * 37 + g.id.charCodeAt(2) * 11) % 360; // Continente del país
+  cx.fillStyle = 'hsl(' + (hh + (45 - hh) * e) + ',' + (70 - 28 * e) + '%,' + (55 - 6 * e) + '%)'; cx.beginPath(); // Los colores se funden en un solo tono
+  g.polys.forEach(po => po[0].forEach((q, i) => { if (i % 2) return; const [x, y] = px(o[0] + (q[0] - o[0]) * k + o[3] * e, o[1] + (q[1] - o[1]) * k + o[4] * e); i ? cx.lineTo(x, y) : cx.moveTo(x, y); })); cx.fill(); // Cada polígono se desplaza hacia Pangea
+ });
+}
+$('pgBtn').onclick = () => { const bien = ['pangea', 'pangaea'].includes(norm($('pgIn').value)); cerrar('pgModal'); sfx(bien ? 'acierto' : 'error'); setTimeout(() => meteoro(!bien), 700); }; // Respuesta de Pangea: acierto = meteorito, fallo = supermeteorito
+$('pgIn').onkeydown = e => { if (e.key == 'Enter') $('pgBtn').click(); }; // Enter también responde
+function meteoro(sup) { // Un meteorito destruye todo
+ const W = cv.width, H = cv.height, D = sup ? 5600 : 4000, T1 = sup ? 2200 : 1500, R = sup ? 70 : 32, diag = Math.hypot(W, H), t0 = performance.now(); sfx(sup ? 'supermeteoro' : 'meteoro'); // Duración, momento del impacto y tamaño
+ const paso = ts => {
+  const t = ts - t0, sh = t > T1 ? (sup ? 16 : 8) * Math.max(0, 1 - (t - T1) / 1800) : 0; cx.setTransform(1, 0, 0, 1, (Math.random() - .5) * sh * 2, (Math.random() - .5) * sh * 2); cx.drawImage(snap, 0, 0); cx.setTransform(1, 0, 0, 1, 0, 0); // Temblor de pantalla
+  if (t < T1) { const u = t / T1, x = W * (1.15 - .65 * u), y = H * (-.15 + .65 * u); cx.lineCap = 'round'; cx.strokeStyle = 'rgba(255,140,40,.55)'; cx.lineWidth = R * 1.6; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x + W * .35 * u + 80, y - H * .35 * u - 80); cx.stroke(); cx.fillStyle = '#ffd36b'; cx.beginPath(); cx.arc(x, y, R, 0, 6.283); cx.fill(); cx.fillStyle = '#ff7a1a'; cx.beginPath(); cx.arc(x, y, R * .6, 0, 6.283); cx.fill(); } // Bola de fuego que cae
+  else { const u = (t - T1) / (D - T1), r = u * diag * (sup ? .9 : .7); cx.save(); cx.beginPath(); cx.arc(W / 2, H / 2, r, 0, 6.283); cx.clip(); cx.fillStyle = 'rgba(35,5,0,.94)'; cx.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { cx.fillStyle = 'rgba(255,' + (80 + Math.random() * 90 | 0) + ',20,.8)'; cx.fillRect(Math.random() * W, Math.random() * H, 4, 4); } cx.restore(); cx.strokeStyle = 'rgba(255,190,70,.95)'; cx.lineWidth = sup ? 18 : 9; cx.beginPath(); cx.arc(W / 2, H / 2, r, 0, 6.283); cx.stroke(); // Onda de destrucción
+   if (t - T1 < 600) { cx.fillStyle = 'rgba(255,255,255,' + (1 - (t - T1) / 600) * .95 + ')'; cx.fillRect(0, 0, W, H); } // Destello del impacto
+   if (u > .7) { cx.fillStyle = 'rgba(0,0,0,' + Math.min(1, (u - .7) * 3.4) + ')'; cx.fillRect(0, 0, W, H); } } // Todo se apaga
+  if (t < D + 700) requestAnimationFrame(paso); else creditos(true); // Al terminar, créditos
+ };
+ requestAnimationFrame(paso);
+}
+const CR = ['🎮 <b>Ruta del Yatiri</b>', '', '💻 Programación, diseño y sonidos: <b>Claude</b> (Anthropic)', '🤝 Un poquito de ayuda: <b>ChatGPT</b> (OpenAI)', '', '👥 <b>Equipo</b>', 'Reylin Garcia Vedia', 'Erica Malverde Hinojosa', 'Leonel Puyal Rodriguez', 'Camila Garcia Flores', 'Rafael Camacho Vera', '', '🙏 Agradecimiento especial al profe <b>Rusberth Caero</b>', '', '¡Gracias por jugar! 🌿']; // Líneas de los créditos
+let cre = new Audio(); cre.loop = true; // Música de los créditos (creditos.mp3, .ogg o .wav)
+['mp3', 'ogg', 'wav'].forEach(x => { const a = new Audio('creditos.' + x); a.loop = true; a.addEventListener('canplaythrough', () => { if (cre.readyState < 3) cre = a; }); }); // Usa el primer formato que exista
+function creditos(fin) { // Muestra los créditos (al final del juego o desde la pausa)
+ crFin = fin; $('crNueva').classList.toggle('oculto', !fin); $('crVolver').classList.toggle('oculto', fin); // Botones según el caso
+ $('crTxt').innerHTML = CR.map((x, i) => `<p class="cl" style="animation-delay:${i * .5}s">${x || '&nbsp;'}</p>`).join(''); abrir('creditos'); // Líneas que aparecen una a una
+ if (fin) { if (cre.readyState >= 3) cre.play().catch(() => { }); else if (mg && musOn) mg.gain.value = .25; } // Música de créditos (o la melodía original)
+}
+$('pCred').onclick = () => { cerrar('pausa'); creditos(false); }; // Créditos desde la pausa
+$('crVolver').onclick = () => { cerrar('creditos'); abrir('pausa'); }; // Vuelve a la pausa
+$('crNueva').onclick = () => { localStorage.removeItem('yatiri'); location.reload(); }; // Nueva aventura

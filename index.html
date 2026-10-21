@@ -23,6 +23,7 @@
 <button id="bTienda">🛒 Tienda</button> <!-- Abre la tienda -->
 <button id="bPaises" title="Países explorados">🗺️</button> <!-- Países explorados -->
 <button id="bFull" title="Pantalla completa">⛶</button> <!-- Pantalla completa -->
+<button id="bMus" title="Música: silenciar / activar">🔊</button> <!-- Silencia la música -->
 <button id="bPausa">⏸️</button> <!-- Abre la pausa -->
 </div>
 <div id="pj" class="oculto"> <!-- Contenedor del personaje -->
@@ -71,6 +72,7 @@
 <button id="pAyuda">📖 Instrucciones</button> <!-- Relee las instrucciones -->
 <button id="pPaises">🗺️ Países explorados</button> <!-- Países explorados -->
 <button id="pMasc">🐾 Mascotas</button> <!-- Mascotas desbloqueadas -->
+<button id="pCred">🏆 Créditos</button> <!-- Créditos -->
 <button id="pConsejos">💡 Consejos</button> <!-- Abre los consejos de monedas -->
 <button id="pSalir">🚪 Salir</button> <!-- Vuelve al inicio -->
 </section>
@@ -136,9 +138,22 @@
 🧭 <b>Siguiente:</b> siempre está disponible: te lleva a un vecino libre o, si no hay, al país libre más cercano. Úsalo con los países muy pequeños (Oceanía, Caribe) que no puedes tocar en el mapa.<br> <!-- Siguiente -->
 🍖 <b>Canastas:</b> restauran 50/75/100% de comida y 25/50/75% de vida; para desbloquear la siguiente compra 5 veces la anterior. ❤️ El botiquín de hospital siempre está disponible y tras 5 se desbloquea el Amarre del Yatiri.<br> <!-- Comida y salud -->
 🌍 <b>Continentes:</b> completa todos sus países para ganar 150 🪙, 1000 🫘, 2 🌿 y una mascota. En 🗺️ ves qué países faltan.<br> <!-- Continentes -->
+🔊 <b>Sonido:</b> el botón 🔊 silencia la música. Haz clic en las mascotas para oír su sonido. Puedes poner tus propios audios (.mp3, .ogg o .wav) en la carpeta del juego con estos nombres: musica, bienvenida, pobre, error, ataque, pocacomida, sincomida, creditos, condor, lobo, foca, rinoceronte, tigre, koala y tortuga.<br> <!-- Sonido -->
 📱 <b>Móvil:</b> en iPhone, usa Compartir → "Añadir a pantalla de inicio" para jugar a pantalla completa.<br> <!-- Móvil -->
 </div>
 <button id="cOk">Volver</button> <!-- Regresa a la pausa -->
+</section>
+<section id="pgModal" class="modal oculto"> <!-- Pregunta final: Pangea -->
+<h2>🌍 ¿Qué país es este?</h2> <!-- Pregunta -->
+<p class="txt">¡Todos los países se unieron en un solo continente!</p> <!-- Pista visual -->
+<input id="pgIn" placeholder="Escribe tu respuesta..."> <!-- Respuesta -->
+<button id="pgBtn">Responder</button> <!-- Envía -->
+</section>
+<section id="creditos" class="modal oculto"> <!-- Créditos -->
+<h2>🏆 Créditos</h2> <!-- Título -->
+<div id="crTxt" class="txt cred"></div> <!-- Líneas generadas por JavaScript -->
+<button id="crNueva" class="oculto">🔄 Nueva aventura</button> <!-- Reinicia tras el final -->
+<button id="crVolver">Volver</button> <!-- Regresa a la pausa -->
 </section>
 <script src="script.js"></script> <!-- Conecta el JavaScript -->
 </body> <!-- Fin del cuerpo -->
